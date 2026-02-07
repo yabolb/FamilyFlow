@@ -38,7 +38,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" className={inter.variable} suppressHydrationWarning>
-      <body className="dark">
+      <body className="dark screen bg-mesh">
         {children}
       </body>
     </html>

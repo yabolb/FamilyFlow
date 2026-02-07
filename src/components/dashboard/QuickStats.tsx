@@ -39,27 +39,25 @@ export default function QuickStats({
     ]
 
     return (
-        <div className="grid grid-cols-3 gap-3">
+        <div className="kpi-grid">
             {stats.map((stat, index) => {
                 const Icon = stat.icon
 
                 return (
                     <motion.div
                         key={stat.label}
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 + index * 0.05 }}
-                        className="bg-white/5 backdrop-blur-sm border border-white/5 rounded-xl p-4 text-center"
+                        className="surface-2 p-4 flex flex-col items-center justify-center gap-2"
                     >
-                        <div className={`w-10 h-10 rounded-lg ${stat.bgColor} flex items-center justify-center mx-auto mb-2`}>
-                            <Icon className={`w-5 h-5 ${stat.color}`} />
-                        </div>
-                        <p className="text-white font-semibold text-lg">
+                        <span className={`text-h2 tabular-nums ${stat.color}`}>
                             {stat.value}
-                        </p>
-                        <p className="text-gray-500 text-xs">
+                        </span>
+                        <div className="flex items-center gap-1.5 text-meta">
+                            <Icon className={`w-3.5 h-3.5 ${stat.color} opacity-80`} />
                             {stat.label}
-                        </p>
+                        </div>
                     </motion.div>
                 )
             })}

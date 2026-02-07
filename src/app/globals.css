@@ -1,70 +1,67 @@
 @import "tailwindcss";
 
 /* ============================================================================
-   FamilyFlow Design System
-   Philosophy: Minimalist + Glassmorphism + Flat Design
+   FamilyFlow Design System V2
+   Philosophy: Clarity + Hierarchy + Solid Foundations
    ============================================================================ */
 
-/* CSS Custom Properties for Design Tokens */
+/* CSS Custom Properties & Tokens */
 :root {
-  /* Base Colors - Light Mode */
-  --color-background: 0 0% 100%;
-  --color-foreground: 222.2 84% 4.9%;
-  --color-muted: 210 40% 96%;
-  --color-muted-foreground: 215 20% 45%;
+  /* V2 Colors - Surfaces & Text */
+  --surface-1: 222.2 84% 4.9%;
+  /* Darkest background */
+  --surface-2: 217 32% 12%;
+  /* Card background */
+  --surface-3: 217 32% 17%;
+  /* Hover/Input background */
 
-  /* Accent Colors */
-  --color-electric-blue: 217 91% 60%;
-  --color-electric-blue-hover: 217 91% 50%;
-  --color-vibrant-green: 142 76% 45%;
-  --color-vibrant-green-hover: 142 76% 38%;
+  --text-primary: 0 0% 98%;
+  /* High emphasis */
+  --text-secondary: 215 20% 65%;
+  /* Medium emphasis */
+  --text-tertiary: 215 20% 45%;
+  /* Low emphasis */
 
-  /* Status Colors */
-  --color-success: 142 76% 45%;
+  /* Legacy Color Support */
+  --color-background: var(--surface-1);
+  --color-foreground: var(--text-primary);
+  --color-muted: var(--surface-2);
+  --color-muted-foreground: var(--text-secondary);
+
+  /* Brand Colors */
+  --brand-primary: 217 91% 60%;
+  --brand-primary-hover: 217 91% 50%;
+  --brand-accent: 142 76% 45%;
+
+  /* Functional Colors */
+  --color-success: 142 70% 50%;
   --color-warning: 38 92% 50%;
   --color-error: 0 84% 60%;
-  --color-pending: 38 92% 50%;
 
-  /* Glassmorphism */
-  --glass-bg: rgba(255, 255, 255, 0.1);
-  --glass-border: rgba(255, 255, 255, 0.2);
-  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  /* Spacing & Layout */
+  --gutter: 24px;
+  --max-width: 480px;
+  /* Mobile-first constraint for desktop view */
 
-  /* Spacing */
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-  --spacing-2xl: 3rem;
-
-  /* Border Radius */
-  --radius-sm: 0.375rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1rem;
-  --radius-xl: 1.5rem;
+  /* Radius V2 - Less inflated */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
   --radius-full: 9999px;
 
-  /* Transitions */
-  --transition-fast: 150ms ease;
-  --transition-normal: 250ms ease;
-  --transition-slow: 350ms ease;
-}
+  /* Glassmorphism (Restricted use: Overlays/Nav only) */
+  --glass-bg: rgba(20, 25, 40, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-blur: 20px;
 
-/* Dark Mode Colors */
-.dark {
-  --color-background: 222.2 84% 4.9%;
-  --color-foreground: 0 0% 98%;
-  --color-muted: 217.2 32.6% 12%;
-  --color-muted-foreground: 215 20% 65%;
-
-  --glass-bg: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
 }
 
 /* ============================================================================
-   Base Styles
+   Reset & Base
    ============================================================================ */
 
 * {
@@ -76,18 +73,21 @@
 html {
   -webkit-tap-highlight-color: transparent;
   scroll-behavior: smooth;
+  font-size: 16px;
+  /* Base size */
 }
 
 body {
-  background: hsl(var(--color-background));
-  color: hsl(var(--color-foreground));
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  background-color: hsl(var(--surface-1));
+  color: hsl(var(--text-primary));
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
 }
 
-/* Prevent zoom on input focus (iOS) */
+/* Prevent zoom on inputs */
 input,
 select,
 textarea {
@@ -95,165 +95,381 @@ textarea {
 }
 
 /* ============================================================================
-   Glassmorphism Utility Classes
+   V2 Layout Primitives
    ============================================================================ */
 
-.glass-panel {
-  background: var(--glass-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--glass-shadow);
+/* Screen Wrapper: Enforces mobile-first constraint and global padding */
+.screen {
+  width: calc(100% - 20px);
+  max-width: var(--max-width);
+  margin: 0 auto;
+  min-height: 100dvh;
+  position: relative;
+  overflow-x: hidden;
+  padding-bottom: 120px;
+  /* Space for bottom nav */
 }
 
-.glass-panel-strong {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--glass-shadow);
+/* Background Mesh: Subtle, professional gradient */
+.bg-mesh {
+  background-color: hsl(var(--surface-1));
+  background-image:
+    radial-gradient(circle at 100% 0%, hsla(var(--brand-primary), 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 0% 100%, hsla(var(--brand-accent), 0.05) 0%, transparent 40%);
+  background-attachment: fixed;
 }
 
-.glass-card {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: var(--radius-md);
+/* Checkered Background Pattern for Graphs/Charts Backgrounds */
+.bg-grid {
+  background-size: 40px 40px;
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+/* Stack: Vertical flex layout for spacing */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stack-lg {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
 }
 
 /* ============================================================================
-   Button Styles
+   V2 Typography System
    ============================================================================ */
 
+.text-hero {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: hsl(var(--text-primary));
+}
+
+.text-h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: hsl(var(--text-primary));
+}
+
+.text-h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: hsl(var(--text-primary));
+}
+
+.text-body {
+  font-size: 1rem;
+  font-weight: 400;
+  color: hsl(var(--text-secondary));
+}
+
+.text-sub {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: hsl(var(--text-tertiary));
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.text-meta {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: hsl(var(--text-tertiary));
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Amounts */
+.amount {
+  font-weight: 600;
+  font-family: 'Inter', monospace;
+  /* Monospace hint for alignment */
+}
+
+.amount-pos {
+  color: hsl(var(--color-success));
+}
+
+.amount-neg {
+  color: hsl(var(--text-primary));
+}
+
+/* Neutral for expenses usually */
+
+/* ============================================================================
+   V2 Surfaces & Cards
+   ============================================================================ */
+
+.surface {
+  background: hsl(var(--surface-2));
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.surface-2 {
+  background: hsl(var(--surface-3));
+  border-radius: var(--radius-md);
+}
+
+/* Hero Card (Month Summary) */
+.hero-card {
+  background: linear-gradient(180deg, hsl(var(--surface-2)) 0%, hsl(var(--surface-1)) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  /* Subtle border */
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Padding Utilities */
+.card-pad-lg {
+  padding: 32px 24px;
+}
+
+.card-pad-md {
+  padding: 24px 20px;
+}
+
+.card-pad-sm {
+  padding: 16px;
+}
+
+/* ============================================================================
+   V2 Components: KPIs & Lists
+   ============================================================================ */
+
+/* KPI Grid */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.kpi {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+/* List Styles */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  /* Divider effect if backgrounds used */
+}
+
+/* List Row: Clean, breathable rows */
+.list-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background-color 0.2s;
+}
+
+.list-row:last-child {
+  border-bottom: none;
+}
+
+.list-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.list-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: hsl(var(--surface-3));
+  color: hsl(var(--text-secondary));
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.list-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* ============================================================================
+   V2 Overlays & Sheets
+   ============================================================================ */
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 50;
+}
+
+.sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: hsl(var(--surface-2));
+  border-top-left-radius: var(--radius-lg);
+  border-top-right-radius: var(--radius-lg);
+  padding: 24px var(--gutter);
+  padding-bottom: max(24px, env(safe-area-inset-bottom));
+  z-index: 60;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sheet-handle {
+  width: 32px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  margin: 0 auto 24px auto;
+}
+
+.btn-sticky {
+  position: sticky;
+  bottom: 24px;
+  margin-top: auto;
+  box-shadow: 0 4px 20px hsla(var(--brand-primary), 0.4);
+}
+
+/* ============================================================================
+   Legacy Compatibility Classes (DO NOT REMOVE)
+   ============================================================================ */
+
+/* Glass Panel (Updated to match surfaces but keep class) */
+.glass-panel {
+  background: hsl(var(--surface-2));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+}
+
+.glass-panel-strong {
+  background: hsl(var(--surface-3));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+}
+
+.glass-card {
+  background: hsl(var(--surface-2));
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Buttons (Legacy + V2) */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.875rem 1.5rem;
+  gap: 8px;
+  padding: 14px 24px;
   font-weight: 600;
-  font-size: 0.9375rem;
+  font-size: 1rem;
   border-radius: var(--radius-md);
   border: none;
   cursor: pointer;
-  transition: all var(--transition-fast);
-  outline: none;
-  user-select: none;
-  -webkit-user-select: none;
+  transition: all 0.2s;
+  width: 100%;
+  /* Mobile first: full width default */
 }
 
 .btn:active {
-  transform: scale(0.97);
+  transform: scale(0.98);
 }
 
 .btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  transform: none;
 }
 
 .btn-primary {
-  background: hsl(var(--color-electric-blue));
+  background: hsl(var(--brand-primary));
   color: white;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: hsl(var(--color-electric-blue-hover));
-}
-
-.btn-success {
-  background: hsl(var(--color-vibrant-green));
-  color: white;
-}
-
-.btn-success:hover:not(:disabled) {
-  background: hsl(var(--color-vibrant-green-hover));
+  background: hsl(var(--brand-primary-hover));
 }
 
 .btn-ghost {
   background: transparent;
-  color: hsl(var(--color-foreground));
-  border: 1px solid var(--glass-border);
+  color: hsl(var(--text-secondary));
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.btn-ghost:hover:not(:disabled) {
-  background: var(--glass-bg);
-}
-
-/* ============================================================================
-   Input Styles
-   ============================================================================ */
-
+/* Inputs (V2 Style applied to legacy class) */
 .input {
   width: 100%;
-  padding: 0.875rem 1rem;
+  padding: 16px;
   font-size: 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: hsl(var(--surface-3));
+  /* Solid background */
+  border: 1px solid transparent;
   border-radius: var(--radius-md);
-  color: hsl(var(--color-foreground));
-  transition: all var(--transition-fast);
+  color: hsl(var(--text-primary));
   outline: none;
-}
-
-.input::placeholder {
-  color: hsl(var(--color-muted-foreground));
+  transition: border-color 0.2s, background-color 0.2s;
 }
 
 .input:focus {
-  border-color: hsl(var(--color-electric-blue));
-  box-shadow: 0 0 0 3px hsla(var(--color-electric-blue), 0.2);
+  background: hsl(var(--surface-2));
+  border-color: hsl(var(--brand-primary));
 }
 
-/* ============================================================================
-   Floating Action Button (FAB)
-   ============================================================================ */
-
+/* Floating Action Button */
 .fab {
   position: fixed;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 5rem);
-  right: 1rem;
-  width: 3.5rem;
-  height: 3.5rem;
+  bottom: calc(80px + env(safe-area-inset-bottom));
+  /* Above nav */
+  right: var(--gutter);
+  width: 56px;
+  height: 56px;
   border-radius: var(--radius-full);
-  background: linear-gradient(135deg, hsl(var(--color-electric-blue)), hsl(217 91% 45%));
+  background: hsl(var(--brand-primary));
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 4px 20px hsla(var(--color-electric-blue), 0.4);
-  transition: all var(--transition-fast);
-  z-index: 50;
-}
-
-.fab:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 28px hsla(var(--color-electric-blue), 0.5);
+  box-shadow: var(--shadow-lg);
+  z-index: 40;
+  transition: transform 0.2s;
 }
 
 .fab:active {
   transform: scale(0.95);
 }
 
-/* ============================================================================
-   Bottom Navigation
-   ============================================================================ */
-
+/* Bottom Navigation (Legacy + V2 tweaks) */
 .bottom-nav {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  height: calc(env(safe-area-inset-bottom, 0px) + 4rem);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+  height: calc(70px + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
   background: var(--glass-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
   border-top: 1px solid var(--glass-border);
   display: flex;
   align-items: center;
@@ -265,145 +481,29 @@ textarea {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.25rem;
-  padding: 0.5rem 1rem;
-  color: hsl(var(--color-muted-foreground));
-  text-decoration: none;
-  font-size: 0.75rem;
-  transition: color var(--transition-fast);
+  gap: 4px;
+  color: hsl(var(--text-tertiary));
+  font-size: 0.7rem;
+  font-weight: 500;
+  transition: color 0.2s;
 }
 
-.bottom-nav-item.active,
-.bottom-nav-item:hover {
-  color: hsl(var(--color-electric-blue));
+.bottom-nav-item.active {
+  color: hsl(var(--brand-primary));
 }
 
-/* ============================================================================
-   Skeleton Loading
-   ============================================================================ */
-
-.skeleton {
-  background: linear-gradient(90deg,
-      rgba(255, 255, 255, 0.05) 25%,
-      rgba(255, 255, 255, 0.1) 50%,
-      rgba(255, 255, 255, 0.05) 75%);
-  background-size: 200% 100%;
-  animation: skeleton-loading 1.5s ease-in-out infinite;
-  border-radius: var(--radius-sm);
-}
-
-@keyframes skeleton-loading {
-  0% {
-    background-position: 200% 0;
-  }
-
-  100% {
-    background-position: -200% 0;
-  }
-}
-
-/* ============================================================================
-   Animations
-   ============================================================================ */
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slide-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes scale-in {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.animate-fade-in {
-  animation: fade-in var(--transition-normal) ease-out;
-}
-
-.animate-slide-up {
-  animation: slide-up var(--transition-normal) ease-out;
-}
-
-.animate-scale-in {
-  animation: scale-in var(--transition-fast) ease-out;
-}
-
-/* ============================================================================
-   Status Indicators
-   ============================================================================ */
-
+/* Utility States */
 .status-dot {
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: var(--radius-full);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
 }
 
 .status-dot-paid {
-  background: hsl(var(--color-success));
+  background: var(--color-success);
 }
 
 .status-dot-pending {
-  background: hsl(var(--color-warning));
-}
-
-/* ============================================================================
-   Dark Background Gradient (for login/onboarding)
-   ============================================================================ */
-
-.bg-gradient-dark {
-  background: linear-gradient(135deg,
-      hsl(222.2 84% 4.9%) 0%,
-      hsl(217 32% 12%) 50%,
-      hsl(222.2 84% 4.9%) 100%);
-}
-
-.bg-gradient-mesh {
-  background-color: hsl(222.2 84% 4.9%);
-  background-image:
-    radial-gradient(at 20% 30%, hsla(var(--color-electric-blue), 0.15) 0px, transparent 50%),
-    radial-gradient(at 80% 70%, hsla(var(--color-vibrant-green), 0.1) 0px, transparent 50%);
-}
-
-/* ============================================================================
-   Safe Area Utilities (for notch devices)
-   ============================================================================ */
-
-.safe-area-bottom {
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-}
-
-.safe-area-top {
-  padding-top: env(safe-area-inset-top, 0px);
-}
-
-.safe-area-right {
-  padding-right: env(safe-area-inset-right, 0px);
-}
-
-.safe-area-left {
-  padding-left: env(safe-area-inset-left, 0px);
+  background: var(--color-warning);
 }

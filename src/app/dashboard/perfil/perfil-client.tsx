@@ -109,7 +109,7 @@ export default function ProfileClient({ user, family, members }: ProfileClientPr
     ]
 
     return (
-        <div className="px-5 pt-12 pb-24">
+        <div className="screen pt-8 px-gutter">
             {/* Toast Notification */}
             <AnimatePresence>
                 {showToast && (
@@ -128,189 +128,135 @@ export default function ProfileClient({ user, family, members }: ProfileClientPr
                 )}
             </AnimatePresence>
 
-            {/* Header */}
-            <header className="mb-8">
-                <p className="text-gray-500 text-sm">Configuración</p>
-                <h1 className="text-2xl font-bold text-white mt-1">Tu perfil</h1>
-            </header>
+            <div className="stack-lg">
+                {/* Header */}
+                <header>
+                    <p className="text-sub">Configuración</p>
+                    <h1 className="text-h1 mt-1">Tu perfil</h1>
+                </header>
 
-            {/* User Card */}
-            <motion.section
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="mb-6"
-            >
-                <div className="glass-panel p-6">
-                    <div className="flex items-center gap-4">
-                        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-500/20">
-                            {user.avatar_url ? (
-                                // eslint-disable-next-line @next/next/no-img-element
-                                <img src={user.avatar_url} alt="" className="w-full h-full rounded-full object-cover" />
-                            ) : (
-                                <span className="text-2xl font-bold text-white">
-                                    {user.full_name.charAt(0).toUpperCase()}
-                                </span>
+                {/* User Card */}
+                <motion.section
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="surface card-pad-md flex items-center gap-4"
+                >
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-500/20 text-xl font-bold text-white">
+                        {user.avatar_url ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img src={user.avatar_url} alt="" className="w-full h-full rounded-full object-cover" />
+                        ) : (
+                            user.full_name.charAt(0).toUpperCase()
+                        )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                            <h2 className="text-h2 truncate">{user.full_name}</h2>
+                            {user.is_family_admin && (
+                                <Crown className="w-4 h-4 text-yellow-400 flex-shrink-0" />
                             )}
                         </div>
-                        <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2">
-                                <h2 className="text-xl font-semibold text-white truncate">{user.full_name}</h2>
-                                {user.is_family_admin && (
-                                    <Crown className="w-4 h-4 text-yellow-400 flex-shrink-0" />
-                                )}
+                        <p className="text-body text-secondary truncate">{user.email}</p>
+                    </div>
+                </motion.section>
+
+                {/* Family Section */}
+                <section className="stack">
+                    <h3 className="text-h2 flex items-center gap-2">
+                        <Users className="w-5 h-5 text-tertiary" />
+                        {family.name}
+                    </h3>
+
+                    {/* Invite Card */}
+                    <div className="surface card-pad-md stack">
+                        <div className="flex items-center gap-3">
+                            <UserPlus className="w-5 h-5 text-brand-primary" />
+                            <h4 className="text-body font-medium">Invitar a la familia</h4>
+                        </div>
+
+                        <div className="surface-2 p-4 rounded-xl flex items-center justify-between">
+                            <div>
+                                <p className="text-meta uppercase tracking-wide mb-1">Código</p>
+                                <p className="text-2xl font-mono font-bold tracking-[0.2em] tabular-nums">
+                                    {family.invite_code}
+                                </p>
                             </div>
-                            <p className="text-gray-400 text-sm truncate">{user.email}</p>
+                            <button
+                                onClick={copyInviteCode}
+                                className="p-3 rounded-xl hover:bg-white/5 transition-all active:scale-95 text-secondary hover:text-white"
+                            >
+                                {codeCopied ? <Check className="w-5 h-5 text-green-400" /> : <Copy className="w-5 h-5" />}
+                            </button>
                         </div>
-                    </div>
-                </div>
-            </motion.section>
 
-            {/* Family Section */}
-            <section className="mb-6">
-                <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                    <Users className="w-5 h-5 text-gray-400" />
-                    {family.name}
-                </h3>
-
-                {/* Invite Card */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
-                    className="glass-panel p-5 mb-4"
-                >
-                    <div className="flex items-center gap-3 mb-4">
-                        <UserPlus className="w-5 h-5 text-blue-400" />
-                        <h4 className="text-white font-medium">Invitar a la familia</h4>
-                    </div>
-
-                    {/* Invite Code Display */}
-                    <div className="flex items-center justify-between bg-white/5 rounded-xl p-4 mb-4">
-                        <div>
-                            <p className="text-gray-500 text-xs uppercase tracking-wide mb-1">Código</p>
-                            <p className="text-2xl font-mono font-bold text-white tracking-[0.3em]">
-                                {family.invite_code}
-                            </p>
-                        </div>
                         <button
-                            onClick={copyInviteCode}
-                            className="p-3 rounded-xl bg-white/10 hover:bg-white/20 transition-all active:scale-95"
+                            onClick={copyInviteLink}
+                            className="btn btn-ghost w-full justify-center text-sm"
                         >
-                            {codeCopied ? (
-                                <Check className="w-5 h-5 text-green-400" />
+                            {linkCopied ? (
+                                <> <Check className="w-4 h-4" /> ¡Enlace copiado! </>
                             ) : (
-                                <Copy className="w-5 h-5 text-gray-400" />
+                                <> <Link2 className="w-4 h-4" /> Copiar enlace de invitación </>
                             )}
                         </button>
                     </div>
 
-                    {/* Copy Link Button */}
-                    <button
-                        onClick={copyInviteLink}
-                        className="w-full py-3 px-4 rounded-xl bg-blue-500/20 border border-blue-500/30
-                                   text-blue-400 font-medium text-sm
-                                   flex items-center justify-center gap-2
-                                   hover:bg-blue-500/30 transition-all active:scale-[0.98]"
-                    >
-                        {linkCopied ? (
-                            <>
-                                <Check className="w-4 h-4" />
-                                ¡Enlace copiado!
-                            </>
-                        ) : (
-                            <>
-                                <Link2 className="w-4 h-4" />
-                                Copiar enlace de invitación
-                            </>
-                        )}
-                    </button>
-
-                    <p className="text-gray-500 text-xs text-center mt-3">
-                        Comparte este enlace para añadir miembros a tu familia
-                    </p>
-                </motion.div>
-
-                {/* Members List */}
-                <div className="space-y-2">
-                    {members.map((member, index) => (
-                        <motion.div
-                            key={member.id}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.2 + index * 0.05 }}
-                            className="flex items-center gap-3 p-4 rounded-xl bg-white/5"
-                        >
-                            <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
-                                {member.avatar_url ? (
-                                    // eslint-disable-next-line @next/next/no-img-element
-                                    <img src={member.avatar_url} alt="" className="w-full h-full rounded-full object-cover" />
-                                ) : (
-                                    <span className="text-sm font-semibold text-gray-400">
-                                        {member.full_name.charAt(0).toUpperCase()}
-                                    </span>
-                                )}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2">
-                                    <p className="text-white font-medium truncate">{member.full_name}</p>
-                                    {member.is_family_admin && (
-                                        <Crown className="w-3 h-3 text-yellow-400 flex-shrink-0" />
-                                    )}
-                                    {member.id === user.id && (
-                                        <span className="text-xs text-gray-500">(Tú)</span>
-                                    )}
+                    {/* Members List */}
+                    <div className="surface">
+                        {members.map((member) => (
+                            <div key={member.id} className="list-row px-4 last:border-0">
+                                <div className="list-left">
+                                    <div className="w-10 h-10 rounded-full bg-surface-3 flex items-center justify-center flex-shrink-0 text-secondary font-medium">
+                                        {member.avatar_url ? (
+                                            // eslint-disable-next-line @next/next/no-img-element
+                                            <img src={member.avatar_url} alt="" className="w-full h-full rounded-full object-cover" />
+                                        ) : (
+                                            member.full_name.charAt(0).toUpperCase()
+                                        )}
+                                    </div>
+                                    <div className="list-content">
+                                        <div className="flex items-center gap-2">
+                                            <p className="text-body font-medium">{member.full_name}</p>
+                                            {member.is_family_admin && <Crown className="w-3 h-3 text-yellow-400" />}
+                                            {member.id === user.id && <span className="text-meta">(Tú)</span>}
+                                        </div>
+                                        <p className="text-meta">{member.email}</p>
+                                    </div>
                                 </div>
-                                <p className="text-gray-500 text-sm truncate">{member.email}</p>
                             </div>
-                        </motion.div>
-                    ))}
-                </div>
-            </section>
+                        ))}
+                    </div>
+                </section>
 
-            {/* Theme Selector */}
-            <section className="mb-6">
-                <h3 className="text-lg font-semibold text-white mb-4">Apariencia</h3>
+                {/* Theme & Logout */}
+                <section className="stack">
+                    <h3 className="text-h2">Ajustes</h3>
 
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="glass-panel p-2"
-                >
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="surface p-2 grid grid-cols-3 gap-2">
                         {themeOptions.map((option) => (
                             <button
                                 key={option.value}
-                                onClick={() => setThemePreference(option.value)}
-                                className={`flex flex-col items-center justify-center gap-2 py-4 rounded-xl transition-all ${theme === option.value
-                                        ? 'bg-blue-500 text-white'
-                                        : 'bg-white/5 text-gray-400 hover:bg-white/10'
+                                onClick={() => setThemePreference(option.value as ThemePreference)}
+                                className={`flex flex-col items-center justify-center gap-2 py-3 rounded-lg transition-all text-sm font-medium ${theme === option.value
+                                    ? 'bg-brand-primary text-white shadow-md'
+                                    : 'text-secondary hover:bg-surface-3 hover:text-white'
                                     }`}
                             >
                                 {option.icon}
-                                <span className="text-xs font-medium">{option.label}</span>
+                                {option.label}
                             </button>
                         ))}
                     </div>
-                </motion.div>
-            </section>
 
-            {/* Logout */}
-            <section>
-                <motion.button
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.35 }}
-                    onClick={handleLogout}
-                    className="w-full p-4 rounded-xl bg-red-500/10 border border-red-500/20
-                               flex items-center justify-center gap-3 
-                               text-red-400 font-medium
-                               hover:bg-red-500/20 transition-all active:scale-[0.98]"
-                >
-                    <LogOut className="w-5 h-5" />
-                    Cerrar sesión
-                </motion.button>
-            </section>
+                    <button
+                        onClick={handleLogout}
+                        className="btn btn-ghost text-error hover:bg-error/10 w-full justify-center mt-4"
+                    >
+                        <LogOut className="w-5 h-5" />
+                        Cerrar sesión
+                    </button>
+                </section>
+            </div>
         </div>
     )
 }

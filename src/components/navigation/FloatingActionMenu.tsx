@@ -47,7 +47,7 @@ export default function FloatingActionMenu() {
     ]
 
     return (
-        <div className="fixed bottom-24 right-6 z-50" ref={menuRef}>
+        <div className="fixed bottom-24 md:bottom-8 right-6 z-50" ref={menuRef}>
             <div className="relative flex flex-col items-center">
                 {/* Sub-buttons */}
                 <AnimatePresence>

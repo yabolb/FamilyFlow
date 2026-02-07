@@ -189,61 +189,68 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     const paidTransactions = typedTransactions.filter(t => t.status === 'paid')
 
     return (
-        <div className="px-5 pt-12 pb-24">
-            {/* Header */}
-            <header className="mb-8">
-                <p className="text-gray-500 text-sm">
-                    {format(now, "EEEE, d 'de' MMMM", { locale: es })}
-                </p>
-                <h1 className="text-2xl font-bold text-white mt-1">
-                    Hola, {typedProfile.full_name.split(' ')[0]} 👋
-                </h1>
+        <div className="screen pt-8 px-gutter">
+            {/* Header & Month Picker */}
+            <header className="stack mb-8">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <p className="text-sub">
+                            {format(now, "EEEE, d 'de' MMMM", { locale: es })}
+                        </p>
+                        <h1 className="text-h1 mt-1">
+                            Hola, {typedProfile.full_name.split(' ')[0]} 👋
+                        </h1>
+                    </div>
+                    {/* Month Picker integrated into header area could go here, or stay below */}
+                </div>
+                <MonthPicker />
             </header>
 
-            {/* Month Picker */}
-            <MonthPicker />
+            {/* Main Content Stack */}
+            <div className="stack-lg">
 
-            {/* Main KPI Card */}
-            <section className="mb-6">
-                <KPICard
-                    title={`Gasto en ${currentMonthName}`}
-                    amount={totalSpent}
-                    subtitle={typedProfile.family.name}
-                    breakdown={{
-                        variable: totalVariable,
-                        fixed: totalFixed,
-                        provision: (isCurrentMonth || targetDate > now) ? totalAnnualProvision : 0,
-                    }}
-                />
-            </section>
-
-            {/* Quick Stats */}
-            <section className="mb-8">
-                <QuickStats
-                    totalTransactions={typedTransactions.length}
-                    pendingCount={pendingTransactions.length}
-                    paidCount={paidTransactions.length}
-                />
-            </section>
-
-            {/* Transactions List */}
-            <section>
-                <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-lg font-semibold text-white">
-                        {isCurrentMonth ? 'Últimos movimientos' : `Movimientos de ${currentMonthName}`}
-                    </h2>
-                </div>
-
-                {typedTransactions.length > 0 ? (
-                    <TransactionList
-                        transactions={typedTransactions}
+                {/* Monthly Summary (Hero Card) */}
+                <section>
+                    <KPICard
+                        title={`Gasto en ${currentMonthName}`}
+                        amount={totalSpent}
+                        subtitle={typedProfile.family.name}
+                        breakdown={{
+                            variable: totalVariable,
+                            fixed: totalFixed,
+                            provision: (isCurrentMonth || targetDate > now) ? totalAnnualProvision : 0,
+                        }}
                     />
-                ) : (
-                    <div className="text-center py-10 bg-white/5 rounded-xl border border-white/10">
-                        <p className="text-gray-400">No hay movimientos en este periodo</p>
+                </section>
+
+                {/* Quick Stats Grid */}
+                <section>
+                    <QuickStats
+                        totalTransactions={typedTransactions.length}
+                        pendingCount={pendingTransactions.length}
+                        paidCount={paidTransactions.length}
+                    />
+                </section>
+
+                {/* Transactions List */}
+                <section>
+                    <div className="flex items-center justify-between mb-4">
+                        <h2 className="text-h2">
+                            {isCurrentMonth ? 'Últimos movimientos' : `Movimientos de ${currentMonthName}`}
+                        </h2>
                     </div>
-                )}
-            </section>
+
+                    {typedTransactions.length > 0 ? (
+                        <TransactionList
+                            transactions={typedTransactions}
+                        />
+                    ) : (
+                        <div className="surface p-8 text-center">
+                            <p className="text-body text-secondary">No hay movimientos en este periodo</p>
+                        </div>
+                    )}
+                </section>
+            </div>
         </div>
     )
 }

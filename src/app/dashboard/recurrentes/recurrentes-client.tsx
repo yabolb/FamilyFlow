@@ -24,9 +24,14 @@ export default function RecurrentesClient({ initialTemplates }: RecurrentesClien
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
     const [isPending, startTransition] = useTransition()
 
-    // Filter templates by frequency
-    const monthlyTemplates = templates.filter(t => t.frequency === 'monthly')
-    const annualTemplates = templates.filter(t => t.frequency === 'annual')
+    // Filter templates by frequency and sort by created_at
+    const monthlyTemplates = templates
+        .filter(t => t.frequency === 'monthly')
+        .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+
+    const annualTemplates = templates
+        .filter(t => t.frequency === 'annual')
+        .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
     const displayedTemplates = activeTab === 'monthly' ? monthlyTemplates : annualTemplates
 
     // Calculate totals

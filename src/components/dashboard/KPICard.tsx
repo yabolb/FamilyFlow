@@ -44,126 +44,101 @@ export default function KPICard({
 
     return (
         <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.3 }}
-            className={`
-        relative overflow-hidden
-        bg-white/5 backdrop-blur-xl 
-        border border-white/10 
-        rounded-2xl p-6
-        ${className}
-      `}
+            className={`hero-card card-pad-lg ${className}`}
         >
-            {/* Background gradient decoration */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-            <div className="absolute bottom-0 left-0 w-24 h-24 bg-green-500/5 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
+            {/* Subtle background flair */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
 
-            <div className="relative">
-                {/* Title */}
-                <p className="text-gray-400 text-sm font-medium mb-1">
-                    {title}
-                </p>
+            <div className="relative stack">
+                {/* Header */}
+                <div className="flex justify-between items-start">
+                    <p className="text-sub">
+                        {title}
+                    </p>
+                    {subtitle && (
+                        <span className="text-meta bg-white/5 px-2 py-0.5 rounded-md">
+                            {subtitle}
+                        </span>
+                    )}
+                </div>
 
-                {/* Amount */}
+                {/* Main Amount */}
                 <div className="flex items-baseline gap-2">
-                    <span className="text-4xl font-bold text-white tracking-tight">
+                    <span className="text-hero tabular-nums">
                         {formatCurrency(amount)}
                     </span>
-                    <span className="text-xl text-gray-400 font-medium">
+                    <span className="text-h2 text-tertiary font-normal">
                         {currency}
                     </span>
                 </div>
 
-                {/* Subtitle and Trend */}
-                <div className="flex items-center justify-between mt-3">
-                    {subtitle && (
-                        <p className="text-gray-500 text-sm">
-                            {subtitle}
-                        </p>
-                    )}
-
-                    {trendValue && trend !== 'neutral' && (
-                        <div className={`
-              flex items-center gap-1 text-sm font-medium
-              ${trend === 'up' ? 'text-red-400' : 'text-green-400'}
-            `}>
-                            {trend === 'up' ? (
-                                <TrendingUp className="w-4 h-4" />
-                            ) : (
-                                <TrendingDown className="w-4 h-4" />
-                            )}
-                            <span>{trendValue}</span>
-                        </div>
-                    )}
-                </div>
+                {/* Trend Section (Optional - kept for compatibility) */}
+                {trendValue && trend !== 'neutral' && (
+                    <div className={`
+                        flex items-center gap-1 text-sub
+                        ${trend === 'up' ? 'amount-neg' : 'amount-pos'}
+                    `}>
+                        {trend === 'up' ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
+                        <span>{trendValue}</span>
+                    </div>
+                )}
 
                 {/* Breakdown Toggle */}
                 {hasBreakdown && (
-                    <>
+                    <div className="mt-2">
                         <button
                             onClick={() => setShowBreakdown(!showBreakdown)}
-                            className="flex items-center gap-1 mt-4 text-xs text-gray-500 hover:text-gray-300 transition-colors"
+                            className="flex items-center gap-2 text-meta hover:text-white transition-colors py-2 w-full border-t border-white/5"
                         >
                             {showBreakdown ? (
                                 <>
-                                    <ChevronUp className="w-3.5 h-3.5" />
-                                    Ocultar desglose
+                                    <ChevronUp className="w-4 h-4" />
+                                    <span>Ocultar desglose</span>
                                 </>
                             ) : (
                                 <>
-                                    <ChevronDown className="w-3.5 h-3.5" />
-                                    Ver desglose
+                                    <ChevronDown className="w-4 h-4" />
+                                    <span>Ver desglose</span>
                                 </>
                             )}
                         </button>
 
-                        {/* Breakdown Details */}
                         <motion.div
                             initial={false}
                             animate={{
                                 height: showBreakdown ? 'auto' : 0,
                                 opacity: showBreakdown ? 1 : 0
                             }}
-                            transition={{ duration: 0.2 }}
                             className="overflow-hidden"
                         >
-                            <div className="mt-4 pt-4 border-t border-white/10 space-y-2">
-                                {/* Variables */}
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-2 h-2 rounded-full bg-blue-400" />
-                                        <span className="text-gray-400 text-sm">Variables</span>
-                                    </div>
-                                    <span className="text-white text-sm font-medium">
-                                        {formatCurrency(breakdown.variable)} €
+                            <div className="pt-2 stack text-sm">
+                                {/* Variable */}
+                                <div className="flex justify-between items-center">
+                                    <span className="text-secondary flex items-center gap-2">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-blue-400" /> Variables
                                     </span>
+                                    <span className="amount tabular-nums">{formatCurrency(breakdown.variable)} €</span>
                                 </div>
-
-                                {/* Fijos Mensuales */}
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-2 h-2 rounded-full bg-purple-400" />
-                                        <span className="text-gray-400 text-sm">Fijos</span>
-                                    </div>
-                                    <span className="text-white text-sm font-medium">
-                                        {formatCurrency(breakdown.fixed)} €
+                                {/* Fixed */}
+                                <div className="flex justify-between items-center">
+                                    <span className="text-secondary flex items-center gap-2">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-purple-400" /> Fijos
                                     </span>
+                                    <span className="amount tabular-nums">{formatCurrency(breakdown.fixed)} €</span>
                                 </div>
-
-                                {/* Provisión Anual */}
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-2 h-2 rounded-full bg-emerald-400" />
-                                        <span className="text-gray-400 text-sm">Provisión Anual</span>
-                                    </div>
-                                    <span className="text-white text-sm font-medium">
-                                        {formatCurrency(breakdown.provision)} €
+                                {/* Provision */}
+                                <div className="flex justify-between items-center">
+                                    <span className="text-secondary flex items-center gap-2">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> Provisión
                                     </span>
+                                    <span className="amount tabular-nums">{formatCurrency(breakdown.provision)} €</span>
                                 </div>
                             </div>
                         </motion.div>
-                    </>
+                    </div>
                 )}
             </div>
         </motion.div>
