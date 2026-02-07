@@ -49,7 +49,7 @@ export default function QuickStats({
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 + index * 0.05 }}
-                        className="surface-2 p-4 flex flex-col items-center justify-center gap-2"
+                        className="surface-2 aspect-square p-3 flex flex-col items-center justify-center gap-1"
                     >
                         <span className={`text-h2 tabular-nums ${stat.color}`}>
                             {stat.value}
