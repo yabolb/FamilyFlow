@@ -1,7 +1,14 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { TrendingDown, TrendingUp } from 'lucide-react'
+import { TrendingDown, TrendingUp, ChevronDown, ChevronUp } from 'lucide-react'
+import { useState } from 'react'
+
+interface BreakdownData {
+    variable: number
+    fixed: number
+    provision: number
+}
 
 interface KPICardProps {
     title: string
@@ -11,6 +18,7 @@ interface KPICardProps {
     trendValue?: string
     currency?: string
     className?: string
+    breakdown?: BreakdownData
 }
 
 export default function KPICard({
@@ -21,13 +29,18 @@ export default function KPICard({
     trendValue,
     currency = '€',
     className = '',
+    breakdown,
 }: KPICardProps) {
+    const [showBreakdown, setShowBreakdown] = useState(false)
+
     const formatCurrency = (value: number) => {
         return new Intl.NumberFormat('es-ES', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
         }).format(value)
     }
+
+    const hasBreakdown = breakdown && (breakdown.variable > 0 || breakdown.fixed > 0 || breakdown.provision > 0)
 
     return (
         <motion.div
@@ -84,6 +97,74 @@ export default function KPICard({
                         </div>
                     )}
                 </div>
+
+                {/* Breakdown Toggle */}
+                {hasBreakdown && (
+                    <>
+                        <button
+                            onClick={() => setShowBreakdown(!showBreakdown)}
+                            className="flex items-center gap-1 mt-4 text-xs text-gray-500 hover:text-gray-300 transition-colors"
+                        >
+                            {showBreakdown ? (
+                                <>
+                                    <ChevronUp className="w-3.5 h-3.5" />
+                                    Ocultar desglose
+                                </>
+                            ) : (
+                                <>
+                                    <ChevronDown className="w-3.5 h-3.5" />
+                                    Ver desglose
+                                </>
+                            )}
+                        </button>
+
+                        {/* Breakdown Details */}
+                        <motion.div
+                            initial={false}
+                            animate={{
+                                height: showBreakdown ? 'auto' : 0,
+                                opacity: showBreakdown ? 1 : 0
+                            }}
+                            transition={{ duration: 0.2 }}
+                            className="overflow-hidden"
+                        >
+                            <div className="mt-4 pt-4 border-t border-white/10 space-y-2">
+                                {/* Variables */}
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-2 h-2 rounded-full bg-blue-400" />
+                                        <span className="text-gray-400 text-sm">Variables</span>
+                                    </div>
+                                    <span className="text-white text-sm font-medium">
+                                        {formatCurrency(breakdown.variable)} €
+                                    </span>
+                                </div>
+
+                                {/* Fijos Mensuales */}
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-2 h-2 rounded-full bg-purple-400" />
+                                        <span className="text-gray-400 text-sm">Fijos</span>
+                                    </div>
+                                    <span className="text-white text-sm font-medium">
+                                        {formatCurrency(breakdown.fixed)} €
+                                    </span>
+                                </div>
+
+                                {/* Provisión Anual */}
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-2 h-2 rounded-full bg-emerald-400" />
+                                        <span className="text-gray-400 text-sm">Provisión Anual</span>
+                                    </div>
+                                    <span className="text-white text-sm font-medium">
+                                        {formatCurrency(breakdown.provision)} €
+                                    </span>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </>
+                )}
             </div>
         </motion.div>
     )

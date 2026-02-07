@@ -7,24 +7,26 @@ interface DrawerContextType {
     openExpenseDrawer: () => void
     closeExpenseDrawer: () => void
     toggleExpenseDrawer: () => void
+
+    isFixedDrawerOpen: boolean
+    openFixedDrawer: () => void
+    closeFixedDrawer: () => void
+    toggleFixedDrawer: () => void
 }
 
 const DrawerContext = createContext<DrawerContextType | undefined>(undefined)
 
 export function DrawerProvider({ children }: { children: ReactNode }) {
     const [isExpenseDrawerOpen, setIsExpenseDrawerOpen] = useState(false)
+    const [isFixedDrawerOpen, setIsFixedDrawerOpen] = useState(false)
 
-    const openExpenseDrawer = useCallback(() => {
-        setIsExpenseDrawerOpen(true)
-    }, [])
+    const openExpenseDrawer = useCallback(() => setIsExpenseDrawerOpen(true), [])
+    const closeExpenseDrawer = useCallback(() => setIsExpenseDrawerOpen(false), [])
+    const toggleExpenseDrawer = useCallback(() => setIsExpenseDrawerOpen(prev => !prev), [])
 
-    const closeExpenseDrawer = useCallback(() => {
-        setIsExpenseDrawerOpen(false)
-    }, [])
-
-    const toggleExpenseDrawer = useCallback(() => {
-        setIsExpenseDrawerOpen(prev => !prev)
-    }, [])
+    const openFixedDrawer = useCallback(() => setIsFixedDrawerOpen(true), [])
+    const closeFixedDrawer = useCallback(() => setIsFixedDrawerOpen(false), [])
+    const toggleFixedDrawer = useCallback(() => setIsFixedDrawerOpen(prev => !prev), [])
 
     return (
         <DrawerContext.Provider
@@ -32,7 +34,11 @@ export function DrawerProvider({ children }: { children: ReactNode }) {
                 isExpenseDrawerOpen,
                 openExpenseDrawer,
                 closeExpenseDrawer,
-                toggleExpenseDrawer
+                toggleExpenseDrawer,
+                isFixedDrawerOpen,
+                openFixedDrawer,
+                closeFixedDrawer,
+                toggleFixedDrawer
             }}
         >
             {children}

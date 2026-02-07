@@ -3,9 +3,10 @@
 import { useState, useRef, useEffect, useTransition } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Loader2, Check, ChevronDown } from 'lucide-react'
-import { addTransaction } from '@/lib/actions'
+import { addTransaction, createCategory } from '@/lib/actions'
 import { getCategories, groupCategoriesByType, type CategoryGroup } from '@/lib/data'
 import type { Category } from '@/types'
+import { Plus } from 'lucide-react'
 
 interface AddExpenseDrawerProps {
     isOpen: boolean
@@ -21,8 +22,31 @@ export default function AddExpenseDrawer({ isOpen, onClose }: AddExpenseDrawerPr
     const [isPending, startTransition] = useTransition()
 
     // Categories state
+    const [allCategories, setAllCategories] = useState<Category[]>([])
     const [categoryGroups, setCategoryGroups] = useState<CategoryGroup[]>([])
     const [loadingCategories, setLoadingCategories] = useState(true)
+    const [showAllCategories, setShowAllCategories] = useState(false)
+    const [isCreatingCategory, setIsCreatingCategory] = useState(false)
+    const [newCategoryName, setNewCategoryName] = useState('')
+
+    const handleCreateCategory = async () => {
+        if (!newCategoryName.trim()) return
+
+        const result = await createCategory({
+            name: newCategoryName.trim(),
+            icon: '📦', // Default icon
+            type: 'variable' // En este modal es variable
+        })
+
+        if (result.success && result.category) {
+            setAllCategories(prev => [...prev, result.category!])
+            setSelectedCategory(result.category)
+            setIsCreatingCategory(false)
+            setNewCategoryName('')
+        } else {
+            setError(result.error || 'Error al crear la categoría')
+        }
+    }
 
     const amountInputRef = useRef<HTMLInputElement>(null)
 
@@ -32,7 +56,8 @@ export default function AddExpenseDrawer({ isOpen, onClose }: AddExpenseDrawerPr
             setLoadingCategories(true)
             try {
                 const categories = await getCategories()
-                const groups = groupCategoriesByType(categories)
+                setAllCategories(categories)
+                const groups = groupCategoriesByType(categories, 'variable')
                 setCategoryGroups(groups)
             } catch (err) {
                 console.error('Error loading categories:', err)
@@ -43,6 +68,12 @@ export default function AddExpenseDrawer({ isOpen, onClose }: AddExpenseDrawerPr
 
         fetchCategories()
     }, [])
+
+    // Update groups when showAllCategories changes
+    useEffect(() => {
+        const groups = groupCategoriesByType(allCategories, showAllCategories ? 'all' : 'variable')
+        setCategoryGroups(groups)
+    }, [showAllCategories, allCategories])
 
     // Focus amount input when drawer opens
     useEffect(() => {
@@ -181,11 +212,7 @@ export default function AddExpenseDrawer({ isOpen, onClose }: AddExpenseDrawerPr
                             ) : (
                                 <div className="mb-6">
                                     {categoryGroups.map((group) => (
-                                        <div key={group.type} className="mb-4">
-                                            <h3 className="text-sm font-medium text-gray-400 mb-3 flex items-center gap-1">
-                                                <ChevronDown className="w-4 h-4" />
-                                                {group.title}
-                                            </h3>
+                                        <div key={group.title} className="mb-4">
                                             <div className="grid grid-cols-4 gap-2">
                                                 {group.categories.map((category) => {
                                                     const isSelected = selectedCategory?.id === category.id
@@ -211,9 +238,56 @@ export default function AddExpenseDrawer({ isOpen, onClose }: AddExpenseDrawerPr
                                                         </button>
                                                     )
                                                 })}
+
+                                                {/* Add New Category Button */}
+                                                {!isCreatingCategory ? (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setIsCreatingCategory(true)}
+                                                        className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl bg-white/5 border border-dashed border-white/20 hover:bg-white/10 transition-all"
+                                                    >
+                                                        <Plus className="w-5 h-5 text-gray-400" />
+                                                        <span className="text-[10px] text-gray-500">Nueva</span>
+                                                    </button>
+                                                ) : (
+                                                    <div className="col-span-2 flex items-center gap-2 bg-white/5 p-2 rounded-xl border border-blue-500/50">
+                                                        <input
+                                                            type="text"
+                                                            value={newCategoryName}
+                                                            onChange={(e) => setNewCategoryName(e.target.value)}
+                                                            placeholder="Nombre..."
+                                                            autoFocus
+                                                            className="flex-1 bg-transparent border-none outline-none text-xs text-white placeholder:text-gray-600"
+                                                            onKeyDown={(e) => {
+                                                                if (e.key === 'Enter') {
+                                                                    e.preventDefault()
+                                                                    handleCreateCategory()
+                                                                }
+                                                                if (e.key === 'Escape') setIsCreatingCategory(false)
+                                                            }}
+                                                        />
+                                                        <button
+                                                            type="button"
+                                                            onClick={handleCreateCategory}
+                                                            className="p-1.5 bg-blue-500 rounded-lg"
+                                                            disabled={!newCategoryName.trim()}
+                                                        >
+                                                            <Plus className="w-3.5 h-3.5 text-white" />
+                                                        </button>
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     ))}
+                                    {!showAllCategories && (
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowAllCategories(true)}
+                                            className="w-full py-2 text-xs text-blue-400 hover:text-blue-300 font-medium transition-colors"
+                                        >
+                                            + Ver todas las categorías
+                                        </button>
+                                    )}
                                 </div>
                             )}
 

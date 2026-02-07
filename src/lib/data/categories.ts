@@ -24,12 +24,18 @@ export async function getCategories(): Promise<Category[]> {
     return data as Category[]
 }
 
-export function groupCategoriesByType(categories: Category[]): CategoryGroup[] {
-    const fixed = categories.filter(c => c.type === 'fixed' || c.type === 'both')
-    const variable = categories.filter(c => c.type === 'variable' || c.type === 'both')
+export type CategoryContext = 'fixed' | 'variable' | 'all'
 
-    return [
-        { title: 'Vivienda', type: 'fixed', categories: fixed },
-        { title: 'Vida Diaria', type: 'variable', categories: variable },
-    ]
+export function groupCategoriesByType(
+    categories: Category[],
+    context: CategoryContext = 'all'
+): CategoryGroup[] {
+    // Filtrar por contexto
+    const filtered = categories.filter(c => {
+        if (context === 'all') return true
+        return c.type === context || c.type === 'both'
+    })
+
+    // Devolver un solo grupo con todas las categorías filtradas
+    return [{ title: 'Categorías', type: 'variable', categories: filtered }]
 }

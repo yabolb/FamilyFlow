@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { KPICard, TransactionList, QuickStats } from '@/components/dashboard'
-import type { Transaction, Category, User as UserType, Family } from '@/types'
+import type { Transaction, Category, User as UserType, Family, ExpenseTemplate } from '@/types'
 
 interface TransactionWithCategory extends Transaction {
     category?: Category | null
@@ -42,22 +42,56 @@ export default async function DashboardPage() {
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
     const startOfMonthStr = startOfMonth.toISOString().split('T')[0]
 
-    // Get transactions for current month
-    const { data: transactions } = await supabase
-        .from('transactions')
-        .select(`
-      *,
-      category:categories(*)
-    `)
-        .eq('family_id', profile.family_id)
-        .gte('date', startOfMonthStr)
-        .order('date', { ascending: false })
-        .limit(10)
+    // =========================================================================
+    // FETCH ALL DATA IN PARALLEL
+    // =========================================================================
 
-    const typedTransactions = (transactions ?? []) as unknown as TransactionWithCategory[]
+    const [transactionsResult, templatesResult] = await Promise.all([
+        // 1. Get transactions for current month (variables)
+        supabase
+            .from('transactions')
+            .select(`
+        *,
+        category:categories(*)
+      `)
+            .eq('family_id', profile.family_id)
+            .gte('date', startOfMonthStr)
+            .order('date', { ascending: false }),
 
-    // Calculate stats
-    const totalSpent = typedTransactions.reduce((sum, t) => sum + Number(t.amount), 0)
+        // 2. Get expense templates (fixed expenses)
+        supabase
+            .from('expense_templates')
+            .select(`
+        *,
+        category:categories(id, name, icon)
+      `)
+            .eq('family_id', profile.family_id)
+            .eq('is_active', true)
+    ])
+
+    const typedTransactions = (transactionsResult.data ?? []) as unknown as TransactionWithCategory[]
+    const templates = (templatesResult.data ?? []) as unknown as (ExpenseTemplate & { category?: Category })[]
+
+    // =========================================================================
+    // CALCULATE TOTALS
+    // =========================================================================
+
+    // 1. Total Variable: Sum of all transactions this month
+    const totalVariable = typedTransactions.reduce((sum, t) => sum + Number(t.amount), 0)
+
+    // 2. Total Fixed Monthly: Sum of monthly expense_templates
+    const monthlyTemplates = templates.filter(t => t.frequency === 'monthly')
+    const totalFixedMonthly = monthlyTemplates.reduce((sum, t) => sum + Number(t.amount), 0)
+
+    // 3. Total Annual Provision: Sum of annual templates / 12
+    const annualTemplates = templates.filter(t => t.frequency === 'annual')
+    const totalAnnualRaw = annualTemplates.reduce((sum, t) => sum + Number(t.amount), 0)
+    const totalAnnualProvision = totalAnnualRaw / 12
+
+    // 4. Grand Total
+    const totalSpent = totalVariable + totalFixedMonthly + totalAnnualProvision
+
+    // Transaction stats
     const pendingTransactions = typedTransactions.filter(t => t.status === 'pending')
     const paidTransactions = typedTransactions.filter(t => t.status === 'paid')
 
@@ -88,6 +122,11 @@ export default async function DashboardPage() {
                     title={`Gasto en ${currentMonth}`}
                     amount={totalSpent}
                     subtitle={typedProfile.family.name}
+                    breakdown={{
+                        variable: totalVariable,
+                        fixed: totalFixedMonthly,
+                        provision: totalAnnualProvision,
+                    }}
                 />
             </section>
 

@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, User } from 'lucide-react'
+import { Home, User, CalendarDays } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 interface NavItem {
@@ -13,6 +13,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
     { href: '/dashboard', icon: Home, label: 'Inicio' },
+    { href: '/dashboard/recurrentes', icon: CalendarDays, label: 'Fijos' },
     { href: '/profile', icon: User, label: 'Perfil' },
 ]
 

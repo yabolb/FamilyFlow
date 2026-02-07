@@ -38,15 +38,14 @@ export interface Category {
 export interface ExpenseTemplate {
     id: string
     family_id: string
-    title: string
+    name: string
     amount: number
-    frequency: ExpenseFrequency
-    due_day: number | null
     category_id: string | null
+    frequency: ExpenseFrequency
+    due_day: number
+    due_month: number | null
     is_active: boolean
-    notes: string | null
     created_at: string
-    updated_at: string
 }
 
 export interface Transaction {
