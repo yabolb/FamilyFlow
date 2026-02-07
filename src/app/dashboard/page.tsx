@@ -1,7 +1,9 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { KPICard, TransactionList, QuickStats } from '@/components/dashboard'
+import { KPICard, TransactionList, QuickStats, MonthPicker } from '@/components/dashboard'
 import type { Transaction, Category, User as UserType, Family, ExpenseTemplate } from '@/types'
+import { startOfMonth, endOfMonth, format, isSameMonth } from 'date-fns'
+import { es } from 'date-fns/locale'
 
 interface TransactionWithCategory extends Transaction {
     category?: Category | null
@@ -11,7 +13,11 @@ interface ProfileWithFamily extends UserType {
     family: Family
 }
 
-export default async function DashboardPage() {
+interface DashboardPageProps {
+    searchParams?: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+export default async function DashboardPage({ searchParams }: DashboardPageProps) {
     const supabase = await createClient()
 
     // Get current user
@@ -37,17 +43,37 @@ export default async function DashboardPage() {
 
     const typedProfile = profile as unknown as ProfileWithFamily
 
-    // Get current month date range
+    // =========================================================================
+    // DATE HANDLING
+    // =========================================================================
+
+    // Resolve searchParams promise (Next.js 15+)
+    const params = await searchParams
+    const monthParam = typeof params?.month === 'string' ? params.month : undefined
+
     const now = new Date()
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
-    const startOfMonthStr = startOfMonth.toISOString().split('T')[0]
+    const selectedDate = monthParam ? new Date(monthParam + '-01T00:00:00') : now
+
+    // Validate date
+    const isValidDate = !isNaN(selectedDate.getTime())
+    const targetDate = isValidDate ? selectedDate : now
+
+    const startDate = startOfMonth(targetDate)
+    const endDate = endOfMonth(targetDate)
+
+    // Format for DB queries
+    // Adjust to local date strings to match database 'YYYY-MM-DD'
+    const startDateStr = format(startDate, 'yyyy-MM-dd')
+    const endDateStr = format(endDate, 'yyyy-MM-dd')
+
+    const isCurrentMonth = isSameMonth(targetDate, now)
 
     // =========================================================================
     // FETCH ALL DATA IN PARALLEL
     // =========================================================================
 
-    const [transactionsResult, templatesResult] = await Promise.all([
-        // 1. Get transactions for current month (variables)
+    const queries = [
+        // 1. Get transactions for selected month
         supabase
             .from('transactions')
             .select(`
@@ -55,19 +81,32 @@ export default async function DashboardPage() {
         category:categories(*)
       `)
             .eq('family_id', profile.family_id)
-            .gte('date', startOfMonthStr)
+            .gte('date', startDateStr)
+            .lte('date', endDateStr)
             .order('date', { ascending: false }),
+    ]
 
-        // 2. Get expense templates (fixed expenses)
-        supabase
-            .from('expense_templates')
-            .select(`
-        *,
-        category:categories(id, name, icon)
-      `)
-            .eq('family_id', profile.family_id)
-            .eq('is_active', true)
-    ])
+    // Only fetch templates if we are in current or future month
+    // For past months, we rely entirely on recorded transactions
+    const shouldFetchTemplates = isCurrentMonth || targetDate > now
+
+    if (shouldFetchTemplates) {
+        queries.push(
+            // 2. Get active expense templates (fixed expenses)
+            supabase
+                .from('expense_templates')
+                .select(`
+            *,
+            category:categories(id, name, icon)
+          `)
+                .eq('family_id', profile.family_id)
+                .eq('is_active', true)
+        )
+    }
+
+    const results = await Promise.all(queries)
+    const transactionsResult = results[0]
+    const templatesResult = shouldFetchTemplates ? results[1] : { data: [] }
 
     const typedTransactions = (transactionsResult.data ?? []) as unknown as TransactionWithCategory[]
     const templates = (templatesResult.data ?? []) as unknown as (ExpenseTemplate & { category?: Category })[]
@@ -76,56 +115,104 @@ export default async function DashboardPage() {
     // CALCULATE TOTALS
     // =========================================================================
 
-    // 1. Total Variable: Sum of all transactions this month
-    const totalVariable = typedTransactions.reduce((sum, t) => sum + Number(t.amount), 0)
+    // 1. Total Variable: Sum of transactions with type 'variable' OR no type (legacy)
+    // We assume mostly variable if not explicitly fixed
+    // BUT we need to be careful not to double count if we have fixed transactions
 
-    // 2. Total Fixed Monthly: Sum of monthly expense_templates
+    // Strategy:
+    // - Calculate Real Spend from transactions (both fixed and variable)
+    // - Calculate Projected Spend from templates (only for current/future)
+
+    // Separate transactions by category type
+    const fixedTransactions = typedTransactions.filter(t => t.category?.type === 'fixed')
+    const variableTransactions = typedTransactions.filter(t => t.category?.type !== 'fixed') // variable or both or null
+
+    const totalRealFixed = fixedTransactions.reduce((sum, t) => sum + Number(t.amount), 0)
+    const totalVariable = variableTransactions.reduce((sum, t) => sum + Number(t.amount), 0)
+
+    // 2. Projected Fixed Monthly (from templates)
     const monthlyTemplates = templates.filter(t => t.frequency === 'monthly')
-    const totalFixedMonthly = monthlyTemplates.reduce((sum, t) => sum + Number(t.amount), 0)
+    const totalProjectedFixed = monthlyTemplates.reduce((sum, t) => sum + Number(t.amount), 0)
 
-    // 3. Total Annual Provision: Sum of annual templates / 12
+    // 3. Projected Annual Provision
     const annualTemplates = templates.filter(t => t.frequency === 'annual')
     const totalAnnualRaw = annualTemplates.reduce((sum, t) => sum + Number(t.amount), 0)
     const totalAnnualProvision = totalAnnualRaw / 12
 
-    // 4. Grand Total
-    const totalSpent = totalVariable + totalFixedMonthly + totalAnnualProvision
+    // Final Total Calculation
+    let totalFixed = 0
 
-    // Transaction stats
+    if (isCurrentMonth) {
+        // HYBRID APPROACH FOR CURRENT MONTH:
+        // We want: Real Paid Fixed + Remaining Pending Fixed
+        // If templates generate pending transactions, then 'totalRealFixed' includes both paid and pending.
+        // So 'totalRealFixed' is likely the correct number if generation happened.
+        // IF generation didn't happen, totalRealFixed might be 0.
+        // Fallback: If totalRealFixed is significantly less than totalProjectedFixed, maybe use projected?
+        // Safer: Use totalRealFixed + (any templates that don't have a matching transaction?) -> Too complex.
+
+        // SIMPLE APPROACH for now:
+        // Use totalRealFixed + totalProjectedFixed? No, double counting.
+
+        // Let's stick to the previous implementation logic but refined:
+        // Previous logic summed ALL transactions + ALL templates. That was definitely double counting if transactions existed.
+
+        // NEW LOGIC:
+        // Total = Variable Transactions + MAX(Real Fixed, Projected Fixed) + Annual Provision
+        // This is a heuristic. If real fixed is low (beginning of month), use projected.
+        // If real fixed is high (maybe extra expenses), use real.
+
+        // Actually, if transactions are generated as 'pending', their amount should match projected.
+        // So totalRealFixed should be ~= totalProjectedFixed.
+        // So we can just use totalRealFixed if > 0.
+
+        if (totalRealFixed > 0) {
+            totalFixed = totalRealFixed
+        } else {
+            totalFixed = totalProjectedFixed
+        }
+    } else if (targetDate > now) {
+        // Future: Use projection
+        totalFixed = totalProjectedFixed
+    } else {
+        // Past: Use real
+        totalFixed = totalRealFixed
+    }
+
+    const totalSpent = totalVariable + totalFixed + (isCurrentMonth || targetDate > now ? totalAnnualProvision : 0)
+
+    // Current month name for display
+    const currentMonthName = format(targetDate, 'MMMM', { locale: es })
+
+    // Stats
     const pendingTransactions = typedTransactions.filter(t => t.status === 'pending')
     const paidTransactions = typedTransactions.filter(t => t.status === 'paid')
 
-    // Current month name
-    const currentMonth = new Intl.DateTimeFormat('es-ES', {
-        month: 'long',
-    }).format(now)
-
     return (
-        <div className="px-5 pt-12">
+        <div className="px-5 pt-12 pb-24">
             {/* Header */}
             <header className="mb-8">
                 <p className="text-gray-500 text-sm">
-                    {new Intl.DateTimeFormat('es-ES', {
-                        weekday: 'long',
-                        day: 'numeric',
-                        month: 'long'
-                    }).format(now)}
+                    {format(now, "EEEE, d 'de' MMMM", { locale: es })}
                 </p>
                 <h1 className="text-2xl font-bold text-white mt-1">
                     Hola, {typedProfile.full_name.split(' ')[0]} 👋
                 </h1>
             </header>
 
+            {/* Month Picker */}
+            <MonthPicker />
+
             {/* Main KPI Card */}
             <section className="mb-6">
                 <KPICard
-                    title={`Gasto en ${currentMonth}`}
+                    title={`Gasto en ${currentMonthName}`}
                     amount={totalSpent}
                     subtitle={typedProfile.family.name}
                     breakdown={{
                         variable: totalVariable,
-                        fixed: totalFixedMonthly,
-                        provision: totalAnnualProvision,
+                        fixed: totalFixed,
+                        provision: (isCurrentMonth || targetDate > now) ? totalAnnualProvision : 0,
                     }}
                 />
             </section>
@@ -139,22 +226,23 @@ export default async function DashboardPage() {
                 />
             </section>
 
-            {/* Recent Transactions */}
+            {/* Transactions List */}
             <section>
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-lg font-semibold text-white">
-                        Últimos movimientos
+                        {isCurrentMonth ? 'Últimos movimientos' : `Movimientos de ${currentMonthName}`}
                     </h2>
-                    {typedTransactions.length > 0 && (
-                        <button className="text-blue-400 text-sm font-medium hover:text-blue-300 transition-colors">
-                            Ver todos
-                        </button>
-                    )}
                 </div>
 
-                <TransactionList
-                    transactions={typedTransactions.slice(0, 5)}
-                />
+                {typedTransactions.length > 0 ? (
+                    <TransactionList
+                        transactions={typedTransactions}
+                    />
+                ) : (
+                    <div className="text-center py-10 bg-white/5 rounded-xl border border-white/10">
+                        <p className="text-gray-400">No hay movimientos en este periodo</p>
+                    </div>
+                )}
             </section>
         </div>
     )
