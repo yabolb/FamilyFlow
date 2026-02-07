@@ -14,7 +14,7 @@ interface NavItem {
 const navItems: NavItem[] = [
     { href: '/dashboard', icon: Home, label: 'Inicio' },
     { href: '/dashboard/recurrentes', icon: CalendarDays, label: 'Fijos' },
-    { href: '/profile', icon: User, label: 'Perfil' },
+    { href: '/dashboard/perfil', icon: User, label: 'Perfil' },
 ]
 
 export default function BottomNav() {

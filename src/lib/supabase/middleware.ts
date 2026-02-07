@@ -36,8 +36,17 @@ export async function updateSession(request: NextRequest) {
     const pathname = request.nextUrl.pathname
 
     // Public routes that don't require authentication
-    const publicRoutes = ['/login', '/auth/callback', '/auth/confirm']
+    const publicRoutes = ['/login', '/signup', '/auth/callback', '/auth/confirm']
     const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route))
+
+    // Handle invite flow for unauthenticated users trying to access onboarding
+    if (!user && pathname === '/onboarding' && request.nextUrl.searchParams.has('invite')) {
+        const inviteCode = request.nextUrl.searchParams.get('invite')
+        const url = request.nextUrl.clone()
+        url.pathname = '/signup'
+        url.searchParams.set('invite', inviteCode!)
+        return NextResponse.redirect(url)
+    }
 
     // If not logged in and trying to access protected route
     if (!user && !isPublicRoute) {

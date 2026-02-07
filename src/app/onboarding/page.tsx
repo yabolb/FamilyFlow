@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Users, Home, UserPlus, ArrowRight, Loader2, Sparkles } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
@@ -9,8 +9,9 @@ import { createClient } from '@/lib/supabase/client'
 type OnboardingStep = 'loading' | 'choose' | 'create' | 'join'
 type LoadingState = 'idle' | 'loading' | 'success' | 'error'
 
-export default function OnboardingPage() {
+function OnboardingContent() {
     const router = useRouter()
+    const searchParams = useSearchParams()
     const [step, setStep] = useState<OnboardingStep>('loading')
     const [familyName, setFamilyName] = useState('')
     const [inviteCode, setInviteCode] = useState('')
@@ -20,13 +21,19 @@ export default function OnboardingPage() {
 
     const supabase = createClient()
 
-    // Check auth on mount
+    // Check auth on mount and handle invite code from URL
     useEffect(() => {
         const checkAuth = async () => {
             const { data: { user } } = await supabase.auth.getUser()
 
             if (!user) {
-                router.push('/login')
+                // Si hay código de invitación, enviar al registro directamente
+                const inviteParam = searchParams.get('invite')
+                if (inviteParam) {
+                    router.push(`/signup?invite=${inviteParam}`)
+                } else {
+                    router.push('/login')
+                }
                 return
             }
 
@@ -44,11 +51,18 @@ export default function OnboardingPage() {
                 return
             }
 
-            setStep('choose')
+            // Check for invite code in URL
+            const inviteParam = searchParams.get('invite')
+            if (inviteParam) {
+                setInviteCode(inviteParam.toUpperCase())
+                setStep('join')
+            } else {
+                setStep('choose')
+            }
         }
 
         checkAuth()
-    }, [supabase, router])
+    }, [supabase, router, searchParams])
 
     const ensureUserProfile = async (userId: string, email: string) => {
         // Check if profile exists
@@ -435,5 +449,17 @@ export default function OnboardingPage() {
                 </div>
             </motion.div>
         </div>
+    )
+}
+
+export default function OnboardingPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-dvh bg-gradient-mesh flex items-center justify-center">
+                <Loader2 className="w-8 h-8 text-blue-400 animate-spin" />
+            </div>
+        }>
+            <OnboardingContent />
+        </Suspense>
     )
 }

@@ -1,12 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Loader2, Mail, Lock } from 'lucide-react'
 
-export default function LoginPage() {
+function LoginContent() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [isLoading, setIsLoading] = useState(false)
@@ -14,6 +15,7 @@ export default function LoginPage() {
 
     const supabase = createClient()
     const router = useRouter()
+    const searchParams = useSearchParams()
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -27,11 +29,14 @@ export default function LoginPage() {
             })
             if (error) throw error
 
-            router.push('/dashboard')
+            // Redirigir a la URL de redirect o al dashboard por defecto
+            const redirectUrl = searchParams.get('redirect') || '/dashboard'
+            router.push(redirectUrl)
             router.refresh()
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error(error)
-            setMessage({ type: 'error', text: error.message || 'Error al iniciar sesión' })
+            const errorMessage = error instanceof Error ? error.message : 'Error al iniciar sesión'
+            setMessage({ type: 'error', text: errorMessage })
         } finally {
             setIsLoading(false)
         }
@@ -103,14 +108,36 @@ export default function LoginPage() {
                         </button>
                     </form>
 
-                    {/* Simple Link for Sign Up (Optional) */}
-                    {/* <div className="mt-6 text-center">
-            <Link href="/register" className="text-sm text-gray-500 hover:text-white transition-colors">
-              ¿No tienes cuenta? Regístrate
-            </Link> 
-          </div> */}
+                    {/* Link to Signup */}
+                    <div className="mt-6 text-center">
+                        <Link
+                            href={(() => {
+                                const redirect = searchParams.get('redirect')
+                                if (redirect?.includes('invite=')) {
+                                    const inviteMatch = redirect.match(/invite=([A-Z0-9]+)/i)
+                                    if (inviteMatch) return `/signup?invite=${inviteMatch[1]}`
+                                }
+                                return '/signup'
+                            })()}
+                            className="text-sm text-gray-500 hover:text-white transition-colors"
+                        >
+                            ¿No tienes cuenta? <span className="text-blue-400">Regístrate</span>
+                        </Link>
+                    </div>
                 </div>
             </motion.div>
         </div>
+    )
+}
+
+export default function LoginPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-dvh flex items-center justify-center bg-gradient-dark">
+                <Loader2 className="w-8 h-8 text-blue-400 animate-spin" />
+            </div>
+        }>
+            <LoginContent />
+        </Suspense>
     )
 }
