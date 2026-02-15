@@ -1,6 +1,6 @@
 {
-  "name": "FamilyFlow - Gestor Financiero Familiar",
-  "short_name": "FamilyFlow",
+  "name": "Family Fin - Gestor Financiero Familiar",
+  "short_name": "Family Fin",
   "description": "Gestiona las finanzas de tu familia de forma colaborativa",
   "start_url": "/",
   "display": "standalone",
@@ -21,7 +21,10 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["finance", "productivity"],
+  "categories": [
+    "finance",
+    "productivity"
+  ],
   "lang": "es",
   "dir": "ltr"
 }

@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { KPICard, TransactionList, QuickStats, MonthPicker } from '@/components/dashboard'
+import { KPICard, TransactionList, QuickStats, MonthPicker, CategoryBreakdown } from '@/components/dashboard'
 import type { Transaction, Category, User as UserType, Family, ExpenseTemplate } from '@/types'
 import { startOfMonth, endOfMonth, format, isSameMonth } from 'date-fns'
 import { es } from 'date-fns/locale'
@@ -188,6 +188,18 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     const pendingTransactions = typedTransactions.filter(t => t.status === 'pending')
     const paidTransactions = typedTransactions.filter(t => t.status === 'paid')
 
+    // Aggregate spending by category (both system and custom)
+    const categoryMap = typedTransactions.reduce((acc, t) => {
+        const catName = t.category?.name ?? 'Sin categoría'
+        const catIcon = t.category?.icon ?? '📦'
+        if (!acc[catName]) acc[catName] = { name: catName, icon: catIcon, total: 0 }
+        acc[catName].total += Number(t.amount)
+        return acc
+    }, {} as Record<string, { name: string; icon: string; total: number }>)
+
+    const sortedCategories = Object.values(categoryMap)
+        .sort((a, b) => b.total - a.total)
+
     return (
         <div className="screen pt-8 px-gutter">
             {/* Header & Month Picker */}
@@ -231,6 +243,9 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                         paidCount={paidTransactions.length}
                     />
                 </section>
+
+                {/* Category Breakdown */}
+                <CategoryBreakdown categories={sortedCategories} />
 
                 {/* Transactions List */}
                 <section>

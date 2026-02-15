@@ -54,7 +54,7 @@ function LoginContent() {
                     <div className="w-16 h-16 bg-brand-primary rounded-2xl mx-auto flex items-center justify-center mb-4 shadow-lg">
                         <span className="text-white text-3xl font-bold">✨</span>
                     </div>
-                    <h1 className="text-h1 mb-2">FamilyFlow</h1>
+                    <h1 className="text-h1 mb-2">Family Fin</h1>
                     <p className="text-body">Gestiona las finanzas de tu familia</p>
                 </div>
 

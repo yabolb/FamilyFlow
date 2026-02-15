@@ -55,7 +55,7 @@ export default function KPICard({
             <div className="relative stack">
                 {/* Header */}
                 <div className="flex justify-between items-start">
-                    <p className="text-sub">
+                    <p className="text-h2">
                         {title}
                     </p>
                     {subtitle && (

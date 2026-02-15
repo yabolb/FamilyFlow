@@ -12,7 +12,7 @@ export default function SideNav() {
         <nav className="fixed left-0 top-0 bottom-0 z-40 w-64 bg-surface-1 border-r border-black/5 hidden md:flex flex-col pt-8 pb-8 px-4 h-screen">
             <div className="mb-12 px-4">
                 <Link href="/dashboard" className="text-xl font-bold bg-gradient-to-r from-brand-primary to-brand-accent bg-clip-text text-transparent block">
-                    FamilyFlow
+                    Family Fin
                 </Link>
             </div>
 

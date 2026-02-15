@@ -2,14 +2,13 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { motion } from 'framer-motion'
 import { NAV_ITEMS } from './constants'
 
 export default function BottomNav() {
     const pathname = usePathname()
 
     return (
-        <nav className="bottom-nav md:hidden">
+        <nav className="bottom-nav">
             {/* Left Items */}
             <div className="flex gap-1">
                 {NAV_ITEMS.slice(0, 2).map((item) => {
@@ -21,19 +20,9 @@ export default function BottomNav() {
                             href={item.href}
                             className={`bottom-nav-item ${isActive ? 'active' : ''}`}
                         >
-                            <motion.div
-                                initial={false}
-                                animate={{ scale: isActive ? 1.1 : 1 }}
-                                className="relative"
-                            >
-                                {isActive && (
-                                    <motion.div
-                                        layoutId="activeTab"
-                                        className="absolute -inset-2 bg-brand-primary opacity-10 rounded-xl"
-                                    />
-                                )}
+                            <div className="relative">
                                 <Icon className="w-6 h-6" strokeWidth={isActive ? 2.5 : 2} />
-                            </motion.div>
+                            </div>
                             <span className="text-[10px] font-medium">{item.label}</span>
                         </Link>
                     )
@@ -54,19 +43,9 @@ export default function BottomNav() {
                             href={item.href}
                             className={`bottom-nav-item ${isActive ? 'active' : ''}`}
                         >
-                            <motion.div
-                                initial={false}
-                                animate={{ scale: isActive ? 1.1 : 1 }}
-                                className="relative"
-                            >
-                                {isActive && (
-                                    <motion.div
-                                        layoutId="activeTab"
-                                        className="absolute -inset-2 bg-brand-primary opacity-10 rounded-xl"
-                                    />
-                                )}
+                            <div className="relative">
                                 <Icon className="w-6 h-6" strokeWidth={isActive ? 2.5 : 2} />
-                            </motion.div>
+                            </div>
                             <span className="text-[10px] font-medium">{item.label}</span>
                         </Link>
                     )

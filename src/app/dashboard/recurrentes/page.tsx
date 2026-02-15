@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import RecurrentesClient from './recurrentes-client'
 
 export const metadata = {
-    title: 'Gastos Fijos - FamilyFlow',
+    title: 'Gastos Fijos - Family Fin',
     description: 'Gestiona tus gastos recurrentes mensuales y anuales',
 }
 

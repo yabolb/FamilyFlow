@@ -1,7 +1,7 @@
 'use client'
 
 import { DrawerProvider, useDrawer } from '@/context'
-import { BottomNav, FloatingActionMenu, SideNav } from '@/components/navigation'
+import { BottomNav, FloatingActionMenu } from '@/components/navigation'
 import { AddExpenseDrawer, AddFixedExpenseDrawer } from '@/components/expenses'
 
 function AppShellContent({ children }: { children: React.ReactNode }) {
@@ -14,10 +14,8 @@ function AppShellContent({ children }: { children: React.ReactNode }) {
 
     return (
         <>
-            <SideNav />
-
             {/* Main content with bottom padding for nav */}
-            <main className="pb-24 md:pb-0 md:pl-64 transition-all duration-300">
+            <main className="pb-28 transition-all duration-300">
                 {children}
             </main>
 

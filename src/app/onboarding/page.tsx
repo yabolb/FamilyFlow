@@ -227,7 +227,7 @@ function OnboardingContent() {
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-brand-primary mb-4">
                     <Sparkles className="w-8 h-8 text-white" />
                 </div>
-                <h1 className="text-h1 mb-2">¡Bienvenido a FamilyFlow!</h1>
+                <h1 className="text-h1 mb-2">¡Bienvenido a Family Fin!</h1>
                 <p className="text-body text-sm">Configura tu espacio familiar</p>
             </motion.div>
 

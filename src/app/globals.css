@@ -16,7 +16,7 @@
 }
 
 /* ============================================================================
-   FamilyFlow Design System V3 — "Atoms & Foundation" Match
+   Family Fin Design System V3 — "Atoms & Foundation" Match
    Based on provided design specs:
    - Primary: Indigo #2424EB
    - Font: Plus Jakarta Sans
@@ -266,13 +266,13 @@ textarea {
   color: hsl(var(--text-primary));
 }
 
-/* Bottom Navigation - Dock Style */
+/* Bottom Navigation - Dock Style (shared mobile + desktop) */
 .bottom-nav {
   position: fixed;
   bottom: 24px;
   left: 24px;
   right: 24px;
-  max-width: calc(var(--max-width) - 48px);
+  max-width: 480px;
   margin: 0 auto;
   height: 72px;
   background: hsl(var(--surface-2));

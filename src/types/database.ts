@@ -1,4 +1,4 @@
-// Database types for FamilyFlow
+// Database types for Family Fin
 // Generated based on Supabase schema
 
 export type CategoryType = 'fixed' | 'variable' | 'both'

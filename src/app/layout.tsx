@@ -9,13 +9,13 @@ const font = Plus_Jakarta_Sans({
 })
 
 export const metadata: Metadata = {
-  title: 'FamilyFlow - Gestor Financiero Familiar',
+  title: 'Family Fin - Gestor Financiero Familiar',
   description: 'Gestiona las finanzas de tu familia de forma colaborativa. Registro rápido de gastos y visión unificada de la economía doméstica.',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'FamilyFlow',
+    title: 'Family Fin',
   },
 }
 
