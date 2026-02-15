@@ -222,12 +222,12 @@ function OnboardingContent() {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="text-center mb-10"
+                className="text-center mb-12"
             >
-                <div className="w-16 h-16 rounded-2xl bg-brand-primary inline-flex items-center justify-center mb-5 shadow-lg">
+                <div className="w-16 h-16 rounded-2xl bg-brand-primary inline-flex items-center justify-center mb-6 shadow-lg">
                     <Sparkles className="w-8 h-8 text-white" />
                 </div>
-                <h1 className="text-h1 mb-1">¡Bienvenido a Family Fin!</h1>
+                <h1 className="text-h1 mb-2">¡Bienvenido a Family Fin!</h1>
                 <p className="text-body text-sm">Configura tu espacio familiar</p>
             </motion.div>
 
@@ -238,7 +238,7 @@ function OnboardingContent() {
                 transition={{ duration: 0.4, delay: 0.1 }}
                 className="w-full max-w-sm"
             >
-                <div className="glass-panel p-6 md:p-8">
+                <div className="glass-panel">
                     <AnimatePresence mode="wait">
                         {/* Step: Choose */}
                         {step === 'choose' && (
@@ -247,7 +247,7 @@ function OnboardingContent() {
                                 initial={{ opacity: 0, x: -20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: 20 }}
-                                className="space-y-5"
+                                className="space-y-6"
                             >
                                 <h2 className="text-h2 text-center mb-6">
                                     ¿Cómo quieres empezar?
@@ -291,9 +291,9 @@ function OnboardingContent() {
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: -20 }}
                                 onSubmit={handleCreateFamily}
-                                className="space-y-6"
+                                className="auth-form"
                             >
-                                <div className="flex items-center gap-3 mb-6">
+                                <div className="flex items-center gap-3 mb-2">
                                     <button
                                         type="button"
                                         onClick={() => { setStep('choose'); setState('idle'); setErrorMessage(''); }}
@@ -306,8 +306,8 @@ function OnboardingContent() {
                                     </h2>
                                 </div>
 
-                                <div className="space-y-2">
-                                    <label htmlFor="familyName" className="text-meta">
+                                <div className="field-group">
+                                    <label htmlFor="familyName" className="text-label">
                                         Nombre de tu familia
                                     </label>
                                     <div className="relative">
@@ -372,9 +372,9 @@ function OnboardingContent() {
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: -20 }}
                                 onSubmit={handleJoinFamily}
-                                className="space-y-6"
+                                className="auth-form"
                             >
-                                <div className="flex items-center gap-3 mb-6">
+                                <div className="flex items-center gap-3 mb-2">
                                     <button
                                         type="button"
                                         onClick={() => { setStep('choose'); setState('idle'); setErrorMessage(''); }}
@@ -387,8 +387,8 @@ function OnboardingContent() {
                                     </h2>
                                 </div>
 
-                                <div className="space-y-2">
-                                    <label htmlFor="inviteCode" className="text-meta">
+                                <div className="field-group">
+                                    <label htmlFor="inviteCode" className="text-label">
                                         Código de invitación
                                     </label>
                                     <input
@@ -403,7 +403,7 @@ function OnboardingContent() {
                                         disabled={state === 'loading' || state === 'success'}
                                         autoFocus
                                     />
-                                    <p className="text-meta text-center">
+                                    <p className="text-meta text-center text-sm mt-1">
                                         Pide el código al administrador de tu familia
                                     </p>
                                 </div>

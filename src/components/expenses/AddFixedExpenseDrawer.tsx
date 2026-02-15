@@ -238,8 +238,7 @@ export function AddFixedExpenseDrawer({
                         animate={{ y: 0 }}
                         exit={{ y: '100%' }}
                         transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-                        className="fixed bottom-0 left-0 right-0 z-[70] 
-                       bg-surface-2 rounded-t-3xl 
+                        className="fixed bottom-0 left-0 right-0 z-[70]                        bg-surface-2 rounded-t-[24px] 
                        max-h-[90dvh] overflow-hidden
                        shadow-2xl shadow-black/10
                        border-t border-black/5"
@@ -248,16 +247,16 @@ export function AddFixedExpenseDrawer({
                             <div className="sheet-handle" />
                         </div>
 
-                        <div className="flex items-center justify-between px-6 pb-4">
+                        <div className="flex items-center justify-between px-gutter pb-4">
                             <h2 className="text-h2">Nuevo gasto fijo</h2>
                             <button onClick={onClose} className="p-2 hover:bg-black/5 rounded-full">
                                 <X className="w-5 h-5 text-tertiary" />
                             </button>
                         </div>
 
-                        <form onSubmit={handleSubmit} className="px-6 pb-8 overflow-y-auto max-h-[calc(90dvh-5rem)]">
-                            <div className="mb-4">
-                                <label className="text-meta block mb-2">
+                        <form onSubmit={handleSubmit} className="px-gutter pb-8 overflow-y-auto max-h-[calc(90dvh-5rem)] stack-lg">
+                            <div>
+                                <label className="text-label block mb-2">
                                     Nombre del gasto
                                 </label>
                                 <input
@@ -269,8 +268,8 @@ export function AddFixedExpenseDrawer({
                                 />
                             </div>
 
-                            <div className="mb-4">
-                                <label className="text-meta block mb-2">
+                            <div>
+                                <label className="text-label block mb-2">
                                     Importe
                                 </label>
                                 <div className="relative">
@@ -286,8 +285,8 @@ export function AddFixedExpenseDrawer({
                                 </div>
                             </div>
 
-                            <div className="mb-4">
-                                <label className="text-meta block mb-2">
+                            <div>
+                                <label className="text-label block mb-2">
                                     Frecuencia
                                 </label>
                                 <div className="grid grid-cols-2 gap-2">
@@ -316,8 +315,8 @@ export function AddFixedExpenseDrawer({
                                 </div>
                             </div>
 
-                            <div className="mb-4">
-                                <label className="text-meta block mb-2">
+                            <div>
+                                <label className="text-label block mb-2">
                                     {frequency === 'monthly' ? 'Día del mes' : 'Fecha de vencimiento'}
                                 </label>
                                 <div className={`grid gap-2 ${frequency === 'annual' ? 'grid-cols-2' : 'grid-cols-1'}`}>
@@ -355,8 +354,8 @@ export function AddFixedExpenseDrawer({
                                 </div>
                             </div>
 
-                            <div className="mb-6">
-                                <label className="text-meta block mb-2">
+                            <div>
+                                <label className="text-label block mb-2">
                                     Categoría
                                 </label>
                                 {loadingCategories ? (

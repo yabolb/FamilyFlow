@@ -66,8 +66,24 @@
 
   ---brand-accent: var(--color-success);
 
+  /* Spacing Scale — 4pt grid, geometric progression */
+  --space-xs: 4px;
+  /* Micro: icon gaps, tight pairs */
+  --space-sm: 8px;
+  /* Label-to-input proximity */
+  --space-md: 12px;
+  /* Intra-group: between label+input units */
+  --space-lg: 16px;
+  /* Inter-group: between form field groups */
+  --space-xl: 24px;
+  /* Container padding, section breaks */
+  --space-2xl: 32px;
+  /* Decision gap: before CTA button */
+  --space-3xl: 40px;
+  /* Branding zone: logo-to-form separation */
+
   /* Spacing & Layout */
-  --gutter: 24px;
+  --gutter: var(--space-xl);
   --max-width: 480px;
 
   /* Radius (From UI "12px RAD") */
@@ -86,7 +102,6 @@
   --shadow-sm: 0 2px 4px rgba(36, 36, 235, 0.04);
   --shadow-md: 0 8px 16px -4px rgba(36, 36, 235, 0.06);
   --shadow-lg: 0 16px 32px -8px rgba(36, 36, 235, 0.08);
-  /* Indigo tinted shadow */
   --shadow-xl: 0 24px 48px -12px rgba(36, 36, 235, 0.12);
 }
 
@@ -173,6 +188,14 @@ textarea {
   color: hsl(var(--text-secondary));
 }
 
+.text-sub {
+  font-size: 14px;
+  /* 14px Regular */
+  font-weight: 400;
+  line-height: 1.5;
+  color: hsl(var(--text-secondary));
+}
+
 .text-label {
   font-size: 14px;
   font-weight: 500;
@@ -199,7 +222,7 @@ textarea {
 /* Inputs */
 .input {
   width: 100%;
-  padding: 14px 16px;
+  padding: var(--space-md) var(--space-lg);
   font-size: 16px;
   background: hsl(var(--surface-2));
   border: 1px solid hsl(210 20% 90%);
@@ -236,6 +259,117 @@ textarea {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
   border: 1px solid rgba(0, 0, 0, 0.04);
+  padding: var(--space-xl);
+}
+
+.hero-card {
+  background: hsl(var(--surface-1));
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .glass-panel {
+    padding: var(--space-2xl);
+  }
+}
+
+/* Auth form — field group spacing */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* General Stacks (Vertical Rhythm) */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.stack-sm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.stack-md {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.stack-lg {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+/* Horizontal Padding */
+.px-gutter {
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+/* Card Padding */
+.card-pad {
+  padding: var(--space-lg);
+}
+
+.card-pad-md {
+  padding: var(--space-lg);
+}
+
+.card-pad-lg {
+  padding: var(--space-xl);
+}
+
+/* List Rows */
+.list-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.list-row:last-child {
+  border-bottom: none;
+}
+
+.list-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex: 1;
+  min-width: 0;
+}
+
+.list-content {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Label sits close to its input (Law of Proximity) */
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* Decision gap before CTA */
+.auth-form .btn {
+  margin-top: var(--space-sm);
+}
+
+/* Footer link below CTA */
+.auth-footer {
+  margin-top: var(--space-lg);
+  text-align: center;
 }
 
 /* Buttons */
@@ -243,8 +377,8 @@ textarea {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 16px 24px;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-xl);
   font-weight: 600;
   font-size: 16px;
   border-radius: var(--radius-md);

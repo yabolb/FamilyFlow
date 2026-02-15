@@ -191,7 +191,7 @@ export default function EditTransactionDrawer({ isOpen, onClose, transaction }: 
                         exit={{ y: '100%' }}
                         transition={{ type: 'spring', damping: 30, stiffness: 300 }}
                         className="fixed bottom-0 left-0 right-0 z-50 
-                       bg-surface-2 rounded-t-3xl 
+                       bg-surface-2 rounded-t-[24px] 
                        max-h-[90dvh] overflow-hidden
                        shadow-2xl shadow-black/10
                        border-t border-black/5"
@@ -202,7 +202,7 @@ export default function EditTransactionDrawer({ isOpen, onClose, transaction }: 
                         </div>
 
                         {/* Header */}
-                        <div className="flex items-center justify-between px-6 pb-4">
+                        <div className="flex items-center justify-between px-gutter pb-4">
                             <h2 className="text-h2">Editar gasto</h2>
                             <button
                                 onClick={onClose}
@@ -213,9 +213,9 @@ export default function EditTransactionDrawer({ isOpen, onClose, transaction }: 
                         </div>
 
                         {/* Form */}
-                        <form onSubmit={handleSubmit} className="px-6 pb-8 overflow-y-auto max-h-[calc(90dvh-5rem)]">
+                        <form onSubmit={handleSubmit} className="px-gutter pb-8 overflow-y-auto max-h-[calc(90dvh-5rem)] stack-lg">
                             {/* Amount Input */}
-                            <div className="mb-8">
+                            <div>
                                 <div className="flex items-center justify-center gap-2">
                                     <input
                                         ref={amountInputRef}
@@ -239,7 +239,7 @@ export default function EditTransactionDrawer({ isOpen, onClose, transaction }: 
                                     <Loader2 className="w-6 h-6 text-secondary animate-spin" />
                                 </div>
                             ) : (
-                                <div className="mb-6">
+                                <div>
                                     {categoryGroups.map((group) => (
                                         <div key={group.title} className="mb-4">
                                             <div className="grid grid-cols-4 gap-2">
@@ -321,8 +321,8 @@ export default function EditTransactionDrawer({ isOpen, onClose, transaction }: 
                             )}
 
                             {/* Date Input */}
-                            <div className="mb-6">
-                                <label htmlFor="date" className="text-meta block mb-2">
+                            <div>
+                                <label htmlFor="date" className="text-label block mb-2">
                                     Fecha
                                 </label>
                                 <input
@@ -335,8 +335,8 @@ export default function EditTransactionDrawer({ isOpen, onClose, transaction }: 
                             </div>
 
                             {/* Description Input */}
-                            <div className="mb-6">
-                                <label htmlFor="description" className="text-meta block mb-2">
+                            <div>
+                                <label htmlFor="description" className="text-label block mb-2">
                                     Concepto (opcional)
                                 </label>
                                 <input

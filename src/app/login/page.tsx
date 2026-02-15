@@ -50,18 +50,18 @@ function LoginContent() {
                 animate={{ y: 0, opacity: 1 }}
                 className="w-full max-w-md z-10"
             >
-                <div className="text-center mb-10">
-                    <div className="w-16 h-16 bg-brand-primary rounded-2xl inline-flex items-center justify-center mb-5 shadow-lg">
+                <div className="text-center mb-12">
+                    <div className="w-16 h-16 bg-brand-primary rounded-2xl inline-flex items-center justify-center mb-6 shadow-lg">
                         <span className="text-white text-3xl font-bold">✨</span>
                     </div>
-                    <h1 className="text-h1 mb-1">Family Fin</h1>
+                    <h1 className="text-h1 mb-2">Family Fin</h1>
                     <p className="text-body">Gestiona las finanzas de tu familia</p>
                 </div>
 
-                <div className="glass-panel p-6 md:p-8">
-                    <form onSubmit={handleLogin} className="space-y-5">
-                        <div>
-                            <label className="text-meta mb-1.5 block">Email</label>
+                <div className="glass-panel">
+                    <form onSubmit={handleLogin} className="auth-form">
+                        <div className="field-group">
+                            <label className="text-label">Email</label>
                             <div className="relative">
                                 <input
                                     type="email"
@@ -75,8 +75,8 @@ function LoginContent() {
                             </div>
                         </div>
 
-                        <div>
-                            <label className="text-meta mb-1.5 block">Contraseña</label>
+                        <div className="field-group">
+                            <label className="text-label">Contraseña</label>
                             <div className="relative">
                                 <input
                                     type="password"
@@ -96,17 +96,19 @@ function LoginContent() {
                             </div>
                         )}
 
-                        <button
-                            type="submit"
-                            disabled={isLoading}
-                            className="btn btn-primary w-full shadow-lg"
-                        >
-                            {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Iniciar sesión'}
-                        </button>
+                        <div className="pt-2">
+                            <button
+                                type="submit"
+                                disabled={isLoading}
+                                className="btn btn-primary w-full shadow-lg"
+                            >
+                                {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Iniciar sesión'}
+                            </button>
+                        </div>
                     </form>
 
                     {/* Link to Signup */}
-                    <div className="mt-6 text-center">
+                    <div className="auth-footer">
                         <Link
                             href={(() => {
                                 const redirect = searchParams.get('redirect')

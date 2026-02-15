@@ -37,10 +37,10 @@ export default async function InteligenciaPage() {
     // )
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center px-6 pb-24">
-            <div className="text-6xl mb-4">🧠</div>
-            <h1 className="text-2xl font-bold text-primary mb-2">Inteligencia</h1>
-            <p className="text-secondary text-center">Coming Soon</p>
+        <div className="screen pt-8 px-gutter flex flex-col items-center justify-center text-center">
+            <div className="text-6xl mb-6">🧠</div>
+            <h1 className="text-h1 mb-2">Inteligencia</h1>
+            <p className="text-sub">Próximamente</p>
         </div>
     )
 }

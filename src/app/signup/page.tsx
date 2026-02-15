@@ -107,11 +107,11 @@ function SignupContent() {
                 className="w-full max-w-md z-10"
             >
                 {/* Header */}
-                <div className="text-center mb-10">
-                    <div className="w-16 h-16 bg-brand-primary rounded-2xl inline-flex items-center justify-center mb-5 shadow-lg">
+                <div className="text-center mb-12">
+                    <div className="w-16 h-16 bg-brand-primary rounded-2xl inline-flex items-center justify-center mb-6 shadow-lg">
                         <Sparkles className="w-8 h-8 text-white" />
                     </div>
-                    <h1 className="text-h1 mb-1">Crear cuenta</h1>
+                    <h1 className="text-h1 mb-2">Crear cuenta</h1>
                     <p className="text-body">
                         {hasInvite
                             ? 'Te han invitado a unirte a una familia'
@@ -125,7 +125,7 @@ function SignupContent() {
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="mb-6 p-4 surface border-l-4 border-l-green-500 flex items-center gap-3"
+                        className="mb-8 p-4 surface border-l-4 border-l-green-500 flex items-center gap-3"
                     >
                         <UserPlus className="w-5 h-5 text-success flex-shrink-0" />
                         <div>
@@ -137,11 +137,11 @@ function SignupContent() {
                     </motion.div>
                 )}
 
-                <div className="glass-panel p-6 md:p-8">
-                    <form onSubmit={handleSignup} className="space-y-5">
+                <div className="glass-panel">
+                    <form onSubmit={handleSignup} className="auth-form">
                         {/* Full Name */}
-                        <div>
-                            <label className="text-meta mb-1.5 block">Nombre completo</label>
+                        <div className="field-group">
+                            <label className="text-label">Nombre completo</label>
                             <div className="relative">
                                 <input
                                     type="text"
@@ -157,8 +157,8 @@ function SignupContent() {
                         </div>
 
                         {/* Email */}
-                        <div>
-                            <label className="text-meta mb-1.5 block">Email</label>
+                        <div className="field-group">
+                            <label className="text-label">Email</label>
                             <div className="relative">
                                 <input
                                     type="email"
@@ -173,8 +173,8 @@ function SignupContent() {
                         </div>
 
                         {/* Password */}
-                        <div>
-                            <label className="text-meta mb-1.5 block">Contraseña</label>
+                        <div className="field-group">
+                            <label className="text-label">Contraseña</label>
                             <div className="relative">
                                 <input
                                     type="password"
@@ -200,21 +200,23 @@ function SignupContent() {
                         )}
 
                         {/* Submit Button */}
-                        <button
-                            type="submit"
-                            disabled={isLoading}
-                            className="btn btn-primary w-full shadow-lg"
-                        >
-                            {isLoading ? (
-                                <Loader2 className="w-5 h-5 animate-spin" />
-                            ) : (
-                                'Crear cuenta'
-                            )}
-                        </button>
+                        <div className="pt-2">
+                            <button
+                                type="submit"
+                                disabled={isLoading}
+                                className="btn btn-primary w-full shadow-lg"
+                            >
+                                {isLoading ? (
+                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                ) : (
+                                    'Crear cuenta'
+                                )}
+                            </button>
+                        </div>
                     </form>
 
                     {/* Login Link */}
-                    <div className="mt-6 text-center">
+                    <div className="auth-footer">
                         <Link
                             href={loginHref}
                             className="text-meta hover:text-primary transition-colors"

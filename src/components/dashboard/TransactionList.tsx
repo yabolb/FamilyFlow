@@ -86,41 +86,41 @@ export default function TransactionList({
     return (
         <>
             <div className="list">
-                {sortedTransactions.map((transaction, index) => {
+                {sortedTransactions.map((transaction) => {
                     const isPending = transaction.status === 'pending'
                     const catIcon = transaction.category?.icon ?? '📦'
                     const displayTitle = transaction.description || transaction.category?.name || 'Sin categoría'
 
                     return (
                         <div
-                            className="transaction-card cursor-pointer group"
+                            className="transaction-card cursor-pointer group hover:bg-surface-2 transition-colors"
                             key={transaction.id}
                             onClick={() => handleTransactionClick(transaction)}
                         >
                             <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-2xl shadow-sm border border-slate-200 group-hover:scale-110 transition-transform">
+                                <div className="w-12 h-12 rounded-full bg-surface-3 flex items-center justify-center text-2xl shadow-sm border border-black/5 group-hover:scale-105 transition-transform">
                                     {catIcon}
                                 </div>
                                 <div className="flex flex-col gap-0.5">
-                                    <p className="text-body font-semibold text-slate-900 leading-tight">
+                                    <p className="text-body font-semibold text-primary leading-tight">
                                         {displayTitle}
                                     </p>
-                                    <p className="text-[12px] font-medium text-slate-400 uppercase tracking-widest">
+                                    <p className="text-xs font-medium text-tertiary uppercase tracking-widest">
                                         {formatDate(transaction.date)}
                                     </p>
                                 </div>
                             </div>
 
                             <div className="flex flex-col items-end gap-0.5">
-                                <span className={`amount text-[16px] ${isPending ? 'text-slate-400' : 'text-slate-900'}`}>
+                                <span className={`amount text-body ${isPending ? 'text-tertiary' : 'text-primary'}`}>
                                     -{formatCurrency(transaction.amount)} €
                                 </span>
                                 {isPending ? (
-                                    <span className="text-[10px] font-bold text-amber-500 uppercase tracking-wider">
+                                    <span className="text-[10px] font-bold text-warning uppercase tracking-wider">
                                         Pendiente
                                     </span>
                                 ) : (
-                                    <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">
+                                    <span className="text-[10px] font-bold text-success uppercase tracking-wider">
                                         Completado
                                     </span>
                                 )}
