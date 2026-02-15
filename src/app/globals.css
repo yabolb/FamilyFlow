@@ -1,5 +1,20 @@
 @import "tailwindcss";
 
+/* Tailwind v4 Theme — Register design system colors as Tailwind utilities */
+@theme {
+  --color-brand-primary: hsl(240 83% 53%);
+  --color-brand-primary-hover: hsl(240 83% 45%);
+  --color-success: hsl(161 84% 39%);
+  --color-error: hsl(0 84% 60%);
+  --color-warning: hsl(38 92% 50%);
+  --color-surface-1: hsl(210 40% 98%);
+  --color-surface-2: hsl(0 0% 100%);
+  --color-surface-3: hsl(210 20% 96%);
+  --color-primary: hsl(222 47% 11%);
+  --color-secondary: hsl(215 16% 47%);
+  --color-tertiary: hsl(215 20% 65%);
+}
+
 /* ============================================================================
    FamilyFlow Design System V3 — "Atoms & Foundation" Match
    Based on provided design specs:
@@ -286,19 +301,15 @@ textarea {
 
 /* FAB - Integrated Center Button */
 .fab-center {
-  background: hsl(var(--brand-primary));
   width: 56px;
   height: 56px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
   box-shadow: 0 8px 16px hsla(var(--brand-primary), 0.4);
   transform: translateY(-24px);
   /* Pop out effect */
-  border: 4px solid hsl(var(--surface-1));
-  /* Cutout effect */
 }
 
 /* Lists as Cards */

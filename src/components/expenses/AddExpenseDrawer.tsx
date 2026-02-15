@@ -2,11 +2,15 @@
 
 import { useState, useRef, useEffect, useTransition } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Loader2, Check, ChevronDown } from 'lucide-react'
+import { X, Loader2, Check, ChevronDown, Plus } from 'lucide-react'
 import { addTransaction, createCategory } from '@/lib/actions'
 import { getCategories, groupCategoriesByType, type CategoryGroup } from '@/lib/data'
 import type { Category } from '@/types'
-import { Plus } from 'lucide-react'
+import { getEmojiForCategory } from '@/lib/emoji-mapper'
+import dynamic from 'next/dynamic'
+
+// Dynamically import EmojiPicker to avoid SSR issues
+const EmojiPicker = dynamic(() => import('emoji-picker-react'), { ssr: false })
 
 interface AddExpenseDrawerProps {
     isOpen: boolean
@@ -29,20 +33,49 @@ export default function AddExpenseDrawer({ isOpen, onClose }: AddExpenseDrawerPr
     const [isCreatingCategory, setIsCreatingCategory] = useState(false)
     const [newCategoryName, setNewCategoryName] = useState('')
 
+    // Emoji state
+    const [newCategoryEmoji, setNewCategoryEmoji] = useState('📦')
+    const [isManualEmoji, setIsManualEmoji] = useState(false)
+    const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false)
+
+    // Auto-update emoji from name
+    useEffect(() => {
+        if (!isManualEmoji && newCategoryName.trim()) {
+            setNewCategoryEmoji(getEmojiForCategory(newCategoryName))
+        } else if (!newCategoryName.trim() && !isManualEmoji) {
+            setNewCategoryEmoji('📦')
+        }
+    }, [newCategoryName, isManualEmoji])
+
+    // Reset emoji state when creation closes
+    useEffect(() => {
+        if (!isCreatingCategory) {
+            setIsManualEmoji(false)
+            setNewCategoryEmoji('📦')
+            setIsEmojiPickerOpen(false)
+            setNewCategoryName('')
+        }
+    }, [isCreatingCategory])
+
+
     const handleCreateCategory = async () => {
         if (!newCategoryName.trim()) return
 
+        // Use current emoji (whether auto or manual)
+        const icon = newCategoryEmoji
+
         const result = await createCategory({
             name: newCategoryName.trim(),
-            icon: '📦', // Default icon
-            type: 'variable' // En este modal es variable
+            icon: icon,
+            type: 'variable'
         })
 
         if (result.success && result.category) {
-            setAllCategories(prev => [...prev, result.category!])
+            setAllCategories(prev => [result.category!, ...prev])
             setSelectedCategory(result.category)
             setIsCreatingCategory(false)
             setNewCategoryName('')
+            // Emoji states reset via useEffect
         } else {
             setError(result.error || 'Error al crear la categoría')
         }
@@ -93,6 +126,7 @@ export default function AddExpenseDrawer({ isOpen, onClose }: AddExpenseDrawerPr
                 setDescription('')
                 setError('')
                 setShowSuccess(false)
+                setIsCreatingCategory(false)
             }, 300)
         }
     }, [isOpen])
@@ -116,14 +150,38 @@ export default function AddExpenseDrawer({ isOpen, onClose }: AddExpenseDrawerPr
             return
         }
 
-        if (!selectedCategory) {
+        let categoryId = selectedCategory?.id
+
+        // Auto-create category if new name is present and no category selected
+        if (!categoryId && newCategoryName.trim()) {
+            const icon = newCategoryEmoji // Use current state
+            const result = await createCategory({
+                name: newCategoryName.trim(),
+                icon: icon,
+                type: 'variable'
+            })
+
+            if (result.success && result.category) {
+                categoryId = result.category.id
+                // Also update local state to reflect creation
+                setAllCategories(prev => [result.category!, ...prev])
+                setSelectedCategory(result.category)
+                setIsCreatingCategory(false)
+                setNewCategoryName('')
+            } else {
+                setError(result.error || 'Error al crear la categoría')
+                return
+            }
+        }
+
+        if (!categoryId) {
             setError('Selecciona una categoría')
             return
         }
 
         const formData = new FormData()
         formData.set('amount', amount)
-        formData.set('category_id', selectedCategory.id)
+        formData.set('category_id', categoryId)
         formData.set('description', description)
         formData.set('date', new Date().toISOString())
 
@@ -169,7 +227,7 @@ export default function AddExpenseDrawer({ isOpen, onClose }: AddExpenseDrawerPr
                     >
                         {/* Handle bar */}
                         <div className="flex justify-center pt-3 pb-2">
-                            <div className="w-10 h-1 rounded-full bg-black/10" />
+                            <div className="sheet-handle" />
                         </div>
 
                         {/* Header */}
@@ -250,14 +308,23 @@ export default function AddExpenseDrawer({ isOpen, onClose }: AddExpenseDrawerPr
                                                         <span className="text-[10px] text-tertiary">Nueva</span>
                                                     </button>
                                                 ) : (
-                                                    <div className="col-span-2 flex items-center gap-2 bg-surface-3 p-2 rounded-xl border border-brand-primary/50">
+                                                    <div className="col-span-4 flex items-center gap-2 bg-surface-3 p-2 rounded-xl border border-brand-primary/50">
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setIsEmojiPickerOpen(!isEmojiPickerOpen)}
+                                                            className="text-xl p-1 hover:bg-black/5 rounded transition-colors"
+                                                            title="Cambiar emoji"
+                                                        >
+                                                            {newCategoryEmoji}
+                                                        </button>
+
                                                         <input
                                                             type="text"
                                                             value={newCategoryName}
                                                             onChange={(e) => setNewCategoryName(e.target.value)}
                                                             placeholder="Nombre..."
                                                             autoFocus
-                                                            className="flex-1 bg-transparent border-none outline-none text-xs text-primary placeholder:text-tertiary"
+                                                            className="flex-1 bg-transparent border-none outline-none text-sm text-primary placeholder:text-tertiary"
                                                             onKeyDown={(e) => {
                                                                 if (e.key === 'Enter') {
                                                                     e.preventDefault()
@@ -277,6 +344,24 @@ export default function AddExpenseDrawer({ isOpen, onClose }: AddExpenseDrawerPr
                                                     </div>
                                                 )}
                                             </div>
+
+                                            {/* Full Emoji Picker — rendered outside the grid for full width */}
+                                            {isCreatingCategory && isEmojiPickerOpen && (
+                                                <div className="mt-2 rounded-xl overflow-hidden border border-black/5">
+                                                    <EmojiPicker
+                                                        onEmojiClick={(emojiData) => {
+                                                            setNewCategoryEmoji(emojiData.emoji)
+                                                            setIsManualEmoji(true)
+                                                            setIsEmojiPickerOpen(false)
+                                                        }}
+                                                        width="100%"
+                                                        height={320}
+                                                        previewConfig={{ showPreview: false }}
+                                                        searchDisabled={false}
+                                                        skinTonesDisabled={true}
+                                                    />
+                                                </div>
+                                            )}
                                         </div>
                                     ))}
                                     {!showAllCategories && (

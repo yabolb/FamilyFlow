@@ -10,11 +10,29 @@ export interface CategoryGroup {
 export async function getCategories(): Promise<Category[]> {
     const supabase = createClient()
 
-    const { data, error } = await supabase
+    // Get current user's family_id
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return []
+
+    const { data: userData } = await supabase
+        .from('users')
+        .select('family_id')
+        .eq('id', user.id)
+        .single()
+
+    // Fetch only system categories (family_id IS NULL) + this family's categories
+    const query = supabase
         .from('categories')
         .select('*')
-        .or('is_system.eq.true,family_id.is.null')
         .order('sort_order', { ascending: true })
+
+    if (userData?.family_id) {
+        query.or(`family_id.eq.${userData.family_id},family_id.is.null`)
+    } else {
+        query.is('family_id', null) // No family? Only system categories
+    }
+
+    const { data, error } = await query
 
     if (error) {
         console.error('Error fetching categories:', error)

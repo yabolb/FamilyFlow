@@ -103,12 +103,12 @@ export default function RecurrentesClient({ initialTemplates }: RecurrentesClien
 
             {/* Tabs */}
             <div className="px-6 mb-4">
-                <div className="flex bg-surface-3 rounded-xl p-1">
+                <div className="flex bg-surface-3 rounded-xl p-1 gap-1">
                     <button
                         onClick={() => setActiveTab('monthly')}
                         className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2 ${activeTab === 'monthly'
-                            ? 'bg-brand-primary text-white shadow-lg'
-                            : 'text-secondary hover:text-white'
+                            ? 'bg-brand-primary text-white shadow-md'
+                            : 'text-secondary hover:text-primary hover:bg-white/60'
                             }`}
                     >
                         <Repeat className="w-4 h-4" />
@@ -117,8 +117,8 @@ export default function RecurrentesClient({ initialTemplates }: RecurrentesClien
                     <button
                         onClick={() => setActiveTab('annual')}
                         className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2 ${activeTab === 'annual'
-                            ? 'bg-brand-primary text-white shadow-lg'
-                            : 'text-secondary hover:text-white'
+                            ? 'bg-brand-primary text-white shadow-md'
+                            : 'text-secondary hover:text-primary hover:bg-white/60'
                             }`}
                     >
                         <CalendarDays className="w-4 h-4" />

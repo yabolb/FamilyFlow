@@ -27,7 +27,19 @@ export async function createCategory(data: CreateCategoryData) {
             return { success: false, error: 'No se encontró la familia del usuario' }
         }
 
-        // 2. Insertar la nueva categoría
+        // 2. Comprobar si ya existe una categoría con el mismo nombre para esta familia (o del sistema)
+        const { data: existingCategories } = await supabase
+            .from('categories')
+            .select('id')
+            .or(`family_id.eq.${userData.family_id},family_id.is.null`)
+            .ilike('name', data.name.trim())
+            .limit(1)
+
+        if (existingCategories && existingCategories.length > 0) {
+            return { success: false, error: 'Esta categoría ya existe' }
+        }
+
+        // 3. Insertar la nueva categoría
         const { data: newCategory, error } = await supabase
             .from('categories')
             .insert({
@@ -36,7 +48,7 @@ export async function createCategory(data: CreateCategoryData) {
                 type: data.type,
                 family_id: userData.family_id,
                 is_system: false,
-                sort_order: 100 // Al final
+                sort_order: 0 // Al principio por defecto
             })
             .select()
             .single()

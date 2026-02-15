@@ -2,13 +2,13 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Plus, Zap, Calendar, X } from 'lucide-react'
+import { Plus, Zap, Calendar } from 'lucide-react'
 import { useDrawer } from '@/context'
 
 export default function FloatingActionMenu() {
     const [isOpen, setIsOpen] = useState(false)
     const menuRef = useRef<HTMLDivElement>(null)
-    const { openExpenseDrawer, openFixedDrawer } = useDrawer()
+    const { openExpenseDrawer, openFixedDrawer, isExpenseDrawerOpen, isFixedDrawerOpen } = useDrawer()
 
     // Close when clicking outside
     useEffect(() => {
@@ -45,6 +45,10 @@ export default function FloatingActionMenu() {
             onClick: () => handleAction(openExpenseDrawer),
         },
     ]
+
+    // Conditionally hide the menu if any drawer is open
+    // Placed strictly after all hooks to avoid Runtime Error
+    if (isExpenseDrawerOpen || isFixedDrawerOpen) return null
 
     return (
         <div className="fixed bottom-[24px] left-1/2 -translate-x-1/2 z-[60] md:left-auto md:right-8 md:translate-x-0 md:bottom-8 transition-all" ref={menuRef}>
@@ -90,8 +94,8 @@ export default function FloatingActionMenu() {
                     transition={{ type: "spring", stiffness: 400, damping: 20 }}
                     className={`fab-center transition-colors relative
             ${isOpen
-                            ? 'bg-surface-3 border-gray-200 text-secondary'
-                            : 'bg-brand-primary text-white'
+                            ? 'bg-surface-3 border border-gray-200 text-secondary'
+                            : 'bg-brand-primary text-white border-4 border-[hsl(var(--surface-1))]'
                         }`}
                 >
                     <Plus className="w-8 h-8" strokeWidth={2.5} />
