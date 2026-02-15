@@ -83,8 +83,8 @@ export default function RecurrentesClient({ initialTemplates }: RecurrentesClien
         <div className="min-h-screen pb-32">
             {/* Header */}
             <div className="px-6 pt-6 pb-4">
-                <h1 className="text-2xl font-bold text-white mb-2">Gastos Fijos</h1>
-                <p className="text-gray-400 text-sm">
+                <h1 className="text-h1 mb-2">Gastos Fijos</h1>
+                <p className="text-sub">
                     Configura tus gastos recurrentes mensuales y anuales
                 </p>
             </div>
@@ -92,23 +92,23 @@ export default function RecurrentesClient({ initialTemplates }: RecurrentesClien
             {/* Summary Cards */}
             <div className="px-6 mb-6 grid grid-cols-2 gap-3">
                 <div className="glass-card p-4">
-                    <p className="text-gray-400 text-xs mb-1">Fijos Mensuales</p>
-                    <p className="text-xl font-bold text-white">{formatCurrency(monthlyTotal)} €</p>
+                    <p className="text-meta mb-1">Fijos Mensuales</p>
+                    <p className="text-xl font-bold text-primary">{formatCurrency(monthlyTotal)} €</p>
                 </div>
                 <div className="glass-card p-4">
-                    <p className="text-gray-400 text-xs mb-1">Provisión Anual/mes</p>
-                    <p className="text-xl font-bold text-emerald-400">{formatCurrency(monthlyProvision)} €</p>
+                    <p className="text-meta mb-1">Provisión Anual/mes</p>
+                    <p className="text-xl font-bold text-success">{formatCurrency(monthlyProvision)} €</p>
                 </div>
             </div>
 
             {/* Tabs */}
             <div className="px-6 mb-4">
-                <div className="flex bg-white/5 rounded-xl p-1">
+                <div className="flex bg-surface-3 rounded-xl p-1">
                     <button
                         onClick={() => setActiveTab('monthly')}
                         className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2 ${activeTab === 'monthly'
-                            ? 'bg-blue-500 text-white shadow-lg'
-                            : 'text-gray-400 hover:text-white'
+                            ? 'bg-brand-primary text-white shadow-lg'
+                            : 'text-secondary hover:text-white'
                             }`}
                     >
                         <Repeat className="w-4 h-4" />
@@ -117,8 +117,8 @@ export default function RecurrentesClient({ initialTemplates }: RecurrentesClien
                     <button
                         onClick={() => setActiveTab('annual')}
                         className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2 ${activeTab === 'annual'
-                            ? 'bg-blue-500 text-white shadow-lg'
-                            : 'text-gray-400 hover:text-white'
+                            ? 'bg-brand-primary text-white shadow-lg'
+                            : 'text-secondary hover:text-white'
                             }`}
                     >
                         <CalendarDays className="w-4 h-4" />
@@ -136,13 +136,13 @@ export default function RecurrentesClient({ initialTemplates }: RecurrentesClien
                             animate={{ opacity: 1 }}
                             className="text-center py-12"
                         >
-                            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white/5 flex items-center justify-center">
-                                <Calendar className="w-8 h-8 text-gray-600" />
+                            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-surface-3 flex items-center justify-center">
+                                <Calendar className="w-8 h-8 text-tertiary" />
                             </div>
-                            <p className="text-gray-400">
+                            <p className="text-secondary">
                                 No hay gastos {activeTab === 'monthly' ? 'mensuales' : 'anuales'} configurados
                             </p>
-                            <p className="text-gray-600 text-sm mt-1">
+                            <p className="text-tertiary text-sm mt-1">
                                 Pulsa el botón + para añadir uno
                             </p>
                         </motion.div>
@@ -159,22 +159,22 @@ export default function RecurrentesClient({ initialTemplates }: RecurrentesClien
                             >
                                 <div className="flex items-center gap-4">
                                     {/* Category Icon */}
-                                    <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-2xl flex-shrink-0">
+                                    <div className="w-12 h-12 rounded-xl bg-surface-3 flex items-center justify-center text-2xl flex-shrink-0">
                                         {template.category?.icon || '📋'}
                                     </div>
 
                                     {/* Content */}
                                     <div className="flex-1 min-w-0">
-                                        <p className="text-white font-medium truncate">{template.name}</p>
+                                        <p className="text-primary font-medium truncate">{template.name}</p>
                                         <div className="flex items-center gap-2 mt-0.5">
-                                            <span className="text-gray-500 text-sm">
+                                            <span className="text-tertiary text-sm">
                                                 {template.frequency === 'monthly'
                                                     ? `Día ${template.due_day}`
                                                     : `${template.due_day}/${template.due_month}`
                                                 }
                                             </span>
-                                            <span className="text-gray-600">•</span>
-                                            <span className="text-gray-500 text-sm">
+                                            <span className="text-tertiary">•</span>
+                                            <span className="text-tertiary text-sm">
                                                 {template.category?.name || 'Sin categoría'}
                                             </span>
                                         </div>
@@ -182,11 +182,11 @@ export default function RecurrentesClient({ initialTemplates }: RecurrentesClien
 
                                     {/* Amount */}
                                     <div className="text-right flex-shrink-0">
-                                        <p className="text-white font-semibold">
+                                        <p className="text-primary font-semibold">
                                             {formatCurrency(Number(template.amount))} €
                                         </p>
                                         {template.frequency === 'annual' && (
-                                            <p className="text-gray-500 text-xs">
+                                            <p className="text-tertiary text-xs">
                                                 {formatCurrency(Number(template.amount) / 12)} €/mes
                                             </p>
                                         )}
@@ -194,12 +194,12 @@ export default function RecurrentesClient({ initialTemplates }: RecurrentesClien
                                 </div>
 
                                 {/* Actions */}
-                                <div className="flex items-center justify-end gap-2 mt-3 pt-3 border-t border-white/5">
+                                <div className="flex items-center justify-end gap-2 mt-3 pt-3 border-t border-black/5">
                                     <button
                                         onClick={() => handleToggle(template.id, template.is_active || false)}
                                         disabled={isPending}
                                         className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm
-                                text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
+                                text-secondary hover:text-primary hover:bg-black/5 transition-colors"
                                     >
                                         {template.is_active ? (
                                             <>
@@ -217,7 +217,7 @@ export default function RecurrentesClient({ initialTemplates }: RecurrentesClien
                                         onClick={() => handleDelete(template.id)}
                                         disabled={isPending}
                                         className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm
-                                text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors"
+                                text-error hover:text-red-600 hover:bg-red-500/10 transition-colors"
                                     >
                                         <Trash2 className="w-4 h-4" />
                                         Eliminar

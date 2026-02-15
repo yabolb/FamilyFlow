@@ -94,9 +94,6 @@ function SignupContent() {
 
     return (
         <div className="min-h-dvh flex flex-col items-center justify-center p-4 bg-gradient-dark relative overflow-hidden">
-            {/* Background Shapes */}
-            <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[100px]" />
-            <div className="absolute bottom-[-10%] left-[-20%] w-[400px] h-[400px] bg-purple-600/10 rounded-full blur-[100px]" />
 
             <motion.div
                 initial={{ y: 20, opacity: 0 }}
@@ -105,11 +102,11 @@ function SignupContent() {
             >
                 {/* Header */}
                 <div className="text-center mb-8">
-                    <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl mx-auto flex items-center justify-center mb-4 shadow-lg shadow-blue-500/30">
+                    <div className="w-16 h-16 bg-brand-primary rounded-2xl mx-auto flex items-center justify-center mb-4 shadow-lg">
                         <Sparkles className="w-8 h-8 text-white" />
                     </div>
-                    <h1 className="text-2xl font-bold text-white mb-2">Crear cuenta</h1>
-                    <p className="text-gray-400">
+                    <h1 className="text-h1 mb-2">Crear cuenta</h1>
+                    <p className="text-body">
                         {hasInvite
                             ? 'Te han invitado a unirte a una familia'
                             : 'Gestiona las finanzas de tu familia'
@@ -122,12 +119,12 @@ function SignupContent() {
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="mb-6 p-4 bg-green-500/10 border border-green-500/30 rounded-xl flex items-center gap-3"
+                        className="mb-6 p-4 surface border-l-4 border-l-green-500 flex items-center gap-3"
                     >
-                        <UserPlus className="w-5 h-5 text-green-400 flex-shrink-0" />
+                        <UserPlus className="w-5 h-5 text-success flex-shrink-0" />
                         <div>
-                            <p className="text-green-300 text-sm font-medium">Invitación activa</p>
-                            <p className="text-green-400/70 text-xs">
+                            <p className="text-success text-sm font-medium">Invitación activa</p>
+                            <p className="text-meta">
                                 Código: <span className="font-mono font-bold">{inviteCode}</span>
                             </p>
                         </div>
@@ -138,59 +135,59 @@ function SignupContent() {
                     <form onSubmit={handleSignup} className="space-y-4">
                         {/* Full Name */}
                         <div>
-                            <label className="text-sm font-medium text-gray-300 mb-1.5 block">Nombre completo</label>
+                            <label className="text-meta mb-1.5 block">Nombre completo</label>
                             <div className="relative">
                                 <input
                                     type="text"
                                     value={fullName}
                                     onChange={(e) => setFullName(e.target.value)}
-                                    className="input pl-10"
+                                    className="input input-icon"
                                     placeholder="Tu nombre"
                                     required
                                     autoFocus
                                 />
-                                <User className="w-5 h-5 text-gray-500 absolute left-3 top-3" />
+                                <User className="w-5 h-5 text-tertiary absolute left-3 top-3" />
                             </div>
                         </div>
 
                         {/* Email */}
                         <div>
-                            <label className="text-sm font-medium text-gray-300 mb-1.5 block">Email</label>
+                            <label className="text-meta mb-1.5 block">Email</label>
                             <div className="relative">
                                 <input
                                     type="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="input pl-10"
+                                    className="input input-icon"
                                     placeholder="tu@email.com"
                                     required
                                 />
-                                <Mail className="w-5 h-5 text-gray-500 absolute left-3 top-3" />
+                                <Mail className="w-5 h-5 text-tertiary absolute left-3 top-3" />
                             </div>
                         </div>
 
                         {/* Password */}
                         <div>
-                            <label className="text-sm font-medium text-gray-300 mb-1.5 block">Contraseña</label>
+                            <label className="text-meta mb-1.5 block">Contraseña</label>
                             <div className="relative">
                                 <input
                                     type="password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="input pl-10"
+                                    className="input input-icon"
                                     placeholder="Mínimo 6 caracteres"
                                     required
                                     minLength={6}
                                 />
-                                <Lock className="w-5 h-5 text-gray-500 absolute left-3 top-3" />
+                                <Lock className="w-5 h-5 text-tertiary absolute left-3 top-3" />
                             </div>
                         </div>
 
                         {/* Error/Success Message */}
                         {message && (
                             <div className={`p-3 rounded-lg text-sm text-center ${message.type === 'success'
-                                ? 'bg-green-500/20 text-green-200'
-                                : 'bg-red-500/20 text-red-200'
+                                ? 'bg-green-500/20 text-success'
+                                : 'bg-red-500/20 text-error'
                                 }`}>
                                 {message.text}
                             </div>
@@ -200,7 +197,7 @@ function SignupContent() {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="btn btn-primary w-full shadow-lg shadow-blue-500/20"
+                            className="btn btn-primary w-full shadow-lg"
                         >
                             {isLoading ? (
                                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -214,9 +211,9 @@ function SignupContent() {
                     <div className="mt-6 text-center">
                         <Link
                             href={loginHref}
-                            className="text-sm text-gray-500 hover:text-white transition-colors"
+                            className="text-meta hover:text-primary transition-colors"
                         >
-                            ¿Ya tienes cuenta? <span className="text-blue-400">Inicia sesión</span>
+                            ¿Ya tienes cuenta? <span className="text-brand-primary">Inicia sesión</span>
                         </Link>
                     </div>
                 </div>
@@ -229,7 +226,7 @@ export default function SignupPage() {
     return (
         <Suspense fallback={
             <div className="min-h-dvh flex items-center justify-center bg-gradient-dark">
-                <Loader2 className="w-8 h-8 text-blue-400 animate-spin" />
+                <Loader2 className="w-8 h-8 text-brand-primary animate-spin" />
             </div>
         }>
             <SignupContent />

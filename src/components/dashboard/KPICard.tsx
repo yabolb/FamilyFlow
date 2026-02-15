@@ -50,7 +50,7 @@ export default function KPICard({
             className={`hero-card card-pad-lg ${className}`}
         >
             {/* Subtle background flair */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+            <div className="absolute top-0 right-0 w-64 h-64 bg-brand-primary opacity-[0.04] rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
 
             <div className="relative stack">
                 {/* Header */}
@@ -59,7 +59,7 @@ export default function KPICard({
                         {title}
                     </p>
                     {subtitle && (
-                        <span className="text-meta bg-white/5 px-2 py-0.5 rounded-md">
+                        <span className="text-meta bg-surface-3 px-2 py-0.5 rounded-md">
                             {subtitle}
                         </span>
                     )}
@@ -91,7 +91,7 @@ export default function KPICard({
                     <div className="mt-2">
                         <button
                             onClick={() => setShowBreakdown(!showBreakdown)}
-                            className="flex items-center gap-2 text-meta hover:text-white transition-colors py-2 w-full border-t border-white/5"
+                            className="flex items-center gap-2 text-meta hover:text-primary transition-colors py-2 w-full border-t border-black/5"
                         >
                             {showBreakdown ? (
                                 <>

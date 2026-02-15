@@ -19,22 +19,19 @@ export default function QuickStats({
             icon: TrendingDown,
             label: 'Gastos',
             value: totalTransactions,
-            color: 'text-red-400',
-            bgColor: 'bg-red-500/10',
+            color: 'text-error',
         },
         {
             icon: Clock,
             label: 'Pendientes',
             value: pendingCount,
-            color: 'text-yellow-400',
-            bgColor: 'bg-yellow-500/10',
+            color: 'text-warning',
         },
         {
             icon: CheckCircle,
             label: 'Pagados',
             value: paidCount,
-            color: 'text-green-400',
-            bgColor: 'bg-green-500/10',
+            color: 'text-success',
         },
     ]
 

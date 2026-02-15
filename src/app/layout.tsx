@@ -1,11 +1,11 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter } from 'next/font/google'
+import { Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
 
-const inter = Inter({
+const font = Plus_Jakarta_Sans({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-inter',
+  variable: '--font-sans',
 })
 
 export const metadata: Metadata = {
@@ -25,10 +25,7 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
   viewportFit: 'cover',
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#0a0a0f' },
-  ],
+  themeColor: '#ffffff',
 }
 
 export default function RootLayout({
@@ -37,8 +34,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="es" className={inter.variable} suppressHydrationWarning>
-      <body className="dark screen bg-mesh" suppressHydrationWarning>
+    <html lang="es" className={font.variable} suppressHydrationWarning>
+      <body className="screen bg-mesh" suppressHydrationWarning>
         {children}
       </body>
     </html>

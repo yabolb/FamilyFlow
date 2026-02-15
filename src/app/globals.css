@@ -1,26 +1,47 @@
 @import "tailwindcss";
 
 /* ============================================================================
-   FamilyFlow Design System V2
-   Philosophy: Clarity + Hierarchy + Solid Foundations
+   FamilyFlow Design System V3 — "Atoms & Foundation" Match
+   Based on provided design specs:
+   - Primary: Indigo #2424EB
+   - Font: Plus Jakarta Sans
+   - Radius: 12px (md), 20px (lg)
+   - Shadows: Soft diffuse
    ============================================================================ */
 
 /* CSS Custom Properties & Tokens */
 :root {
-  /* V2 Colors - Surfaces & Text */
-  --surface-1: 222.2 84% 4.9%;
-  /* Darkest background */
-  --surface-2: 217 32% 12%;
-  /* Card background */
-  --surface-3: 217 32% 17%;
-  /* Hover/Input background */
+  /* V3 Palette — From Design Images */
 
-  --text-primary: 0 0% 98%;
-  /* High emphasis */
-  --text-secondary: 215 20% 65%;
-  /* Medium emphasis */
-  --text-tertiary: 215 20% 45%;
-  /* Low emphasis */
+  /* Primary Indigo #2424EB */
+  --brand-primary: 240 83% 53%;
+  --brand-primary-hover: 240 83% 45%;
+
+  /* Success Emerald #10B981 */
+  --color-success: 161 84% 39%;
+
+  /* Error Red #EF4444 */
+  --color-error: 0 84% 60%;
+
+  /* Warning (Inferred/Standard) */
+  --color-warning: 38 92% 50%;
+
+  /* Neutral Slate 500 #64748B (matches text-secondary) */
+  /* Surfaces */
+  --surface-1: 210 40% 98%;
+  /* Almost white blue-ish tint (Slate 50) */
+  --surface-2: 0 0% 100%;
+  /* Pure White */
+  --surface-3: 210 20% 96%;
+  /* Light Slate */
+
+  /* Text */
+  --text-primary: 222 47% 11%;
+  /* Slate 900 #0F172A */
+  --text-secondary: 215 16% 47%;
+  /* Slate 500 #64748B */
+  --text-tertiary: 215 20% 65%;
+  /* Slate 400 */
 
   /* Legacy Color Support */
   --color-background: var(--surface-1);
@@ -28,36 +49,30 @@
   --color-muted: var(--surface-2);
   --color-muted-foreground: var(--text-secondary);
 
-  /* Brand Colors */
-  --brand-primary: 217 91% 60%;
-  --brand-primary-hover: 217 91% 50%;
-  --brand-accent: 142 76% 45%;
-
-  /* Functional Colors */
-  --color-success: 142 70% 50%;
-  --color-warning: 38 92% 50%;
-  --color-error: 0 84% 60%;
+  ---brand-accent: var(--color-success);
 
   /* Spacing & Layout */
   --gutter: 24px;
   --max-width: 480px;
-  /* Mobile-first constraint for desktop view */
 
-  /* Radius V2 - Less inflated */
+  /* Radius (From UI "12px RAD") */
   --radius-sm: 8px;
   --radius-md: 12px;
-  --radius-lg: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 32px;
   --radius-full: 9999px;
 
-  /* Glassmorphism (Restricted use: Overlays/Nav only) */
-  --glass-bg: rgba(20, 25, 40, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-blur: 20px;
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.90);
+  --glass-border: rgba(0, 0, 0, 0.05);
+  --glass-blur: 16px;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+  /* Shadows — Soft & Diffuse (Elevation & Depth) */
+  --shadow-sm: 0 2px 4px rgba(36, 36, 235, 0.04);
+  --shadow-md: 0 8px 16px -4px rgba(36, 36, 235, 0.06);
+  --shadow-lg: 0 16px 32px -8px rgba(36, 36, 235, 0.08);
+  /* Indigo tinted shadow */
+  --shadow-xl: 0 24px 48px -12px rgba(36, 36, 235, 0.12);
 }
 
 /* ============================================================================
@@ -74,31 +89,30 @@ html {
   -webkit-tap-highlight-color: transparent;
   scroll-behavior: smooth;
   font-size: 16px;
-  /* Base size */
 }
 
 body {
   background-color: hsl(var(--surface-1));
   color: hsl(var(--text-primary));
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-sans), 'Inter', system-ui, sans-serif;
   min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  line-height: 1.5;
+  line-height: 1.6;
+  /* From Typography image: 1.6 line height */
 }
 
-/* Prevent zoom on inputs */
 input,
 select,
 textarea {
   font-size: 16px !important;
+  font-family: inherit;
 }
 
 /* ============================================================================
-   V2 Layout Primitives
+   V3 Components
    ============================================================================ */
 
-/* Screen Wrapper: Enforces mobile-first constraint and global padding */
 .screen {
   width: calc(100% - 20px);
   max-width: var(--max-width);
@@ -107,114 +121,271 @@ textarea {
   position: relative;
   overflow-x: hidden;
   padding-bottom: 120px;
-  /* Space for bottom nav */
 }
 
-/* Background Mesh: Subtle, professional gradient */
 .bg-mesh {
   background-color: hsl(var(--surface-1));
+  /* Subtle mesh using new Primary Indigo */
   background-image:
-    radial-gradient(circle at 100% 0%, hsla(var(--brand-primary), 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 0% 100%, hsla(var(--brand-accent), 0.05) 0%, transparent 40%);
+    radial-gradient(circle at 100% 0%, hsla(var(--brand-primary), 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 0% 100%, hsla(var(--brand-primary), 0.02) 0%, transparent 50%);
   background-attachment: fixed;
 }
 
-/* Checkered Background Pattern for Graphs/Charts Backgrounds */
-.bg-grid {
-  background-size: 40px 40px;
-  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-}
-
-/* Stack: Vertical flex layout for spacing */
-.stack {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.stack-lg {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-}
-
-/* ============================================================================
-   V2 Typography System
-   ============================================================================ */
-
-.text-hero {
-  font-size: 2.5rem;
-  font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  color: hsl(var(--text-primary));
-}
-
+/* Fonts */
 .text-h1 {
-  font-size: 1.75rem;
-  font-weight: 700;
+  font-size: 24px;
+  /* 24px Semibold */
+  font-weight: 600;
+  letter-spacing: -0.02em;
   line-height: 1.2;
-  letter-spacing: -0.01em;
   color: hsl(var(--text-primary));
 }
 
 .text-h2 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  line-height: 1.3;
+  font-size: 20px;
+  /* 20px Medium */
+  font-weight: 500;
+  letter-spacing: -0.01em;
   color: hsl(var(--text-primary));
 }
 
 .text-body {
-  font-size: 1rem;
+  font-size: 16px;
+  /* 16px Regular */
   font-weight: 400;
+  line-height: 1.6;
   color: hsl(var(--text-secondary));
 }
 
-.text-sub {
-  font-size: 0.875rem;
+.text-label {
+  font-size: 14px;
   font-weight: 500;
-  color: hsl(var(--text-tertiary));
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  color: hsl(var(--text-secondary));
 }
 
-.text-meta {
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: hsl(var(--text-tertiary));
-}
-
-.tabular-nums {
-  font-variant-numeric: tabular-nums;
-}
-
-/* Amounts */
 .amount {
+  font-family: var(--font-sans);
+  /* Use same font, not mono, for modern look */
   font-weight: 600;
-  font-family: 'Inter', monospace;
-  /* Monospace hint for alignment */
+  letter-spacing: -0.02em;
 }
 
-.amount-pos {
-  color: hsl(var(--color-success));
+/* Cards & Surfaces */
+.surface {
+  background: hsl(var(--surface-2));
+  border-radius: var(--radius-lg);
+  /* Rounded cards */
+  box-shadow: var(--shadow-sm);
+  border: 1px solid white;
+  /* Subtle border */
 }
 
-.amount-neg {
+/* Inputs */
+.input {
+  width: 100%;
+  padding: 16px;
+  font-size: 16px;
+  background: hsl(var(--surface-2));
+  border: 1px solid hsl(210 20% 90%);
+  /* Light slate border */
+  border-radius: var(--radius-md);
+  color: hsl(var(--text-primary));
+  outline: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.input:focus {
+  border-color: hsl(var(--brand-primary));
+  box-shadow: 0 0 0 4px hsla(var(--brand-primary), 0.1);
+}
+
+.input-icon {
+  padding-left: 48px;
+  /* More space for icons */
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 24px;
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 100%;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  background: hsl(var(--brand-primary));
+  color: white;
+  box-shadow: 0 4px 12px hsla(var(--brand-primary), 0.25);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: hsl(var(--brand-primary-hover));
+  box-shadow: 0 6px 16px hsla(var(--brand-primary), 0.3);
+}
+
+.btn-success {
+  background: hsl(var(--color-success));
+  color: white;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: hsl(var(--text-secondary));
+}
+
+.btn-ghost:hover {
+  background: hsla(var(--text-secondary), 0.1);
   color: hsl(var(--text-primary));
 }
 
-/* Neutral for expenses usually */
-
-/* ============================================================================
-   V2 Surfaces & Cards
-   ============================================================================ */
-
-.surface {
+/* Bottom Navigation - Dock Style */
+.bottom-nav {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  right: 24px;
+  max-width: calc(var(--max-width) - 48px);
+  margin: 0 auto;
+  height: 72px;
   background: hsl(var(--surface-2));
-  border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  z-index: 50;
+}
+
+.bottom-nav-item {
+  color: hsl(var(--text-tertiary));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 48px;
+}
+
+.bottom-nav-item.active {
+  color: hsl(var(--brand-primary));
+}
+
+/* FAB - Integrated Center Button */
+.fab-center {
+  background: hsl(var(--brand-primary));
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 8px 16px hsla(var(--brand-primary), 0.4);
+  transform: translateY(-24px);
+  /* Pop out effect */
+  border: 4px solid hsl(var(--surface-1));
+  /* Cutout effect */
+}
+
+/* Lists as Cards */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  /* Spacing between cards */
+}
+
+/* Transaction Card Style */
+.transaction-card {
+  background: hsl(var(--surface-2));
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s;
+}
+
+.transaction-card:active {
+  transform: scale(0.99);
+}
+
+/* Utility */
+.text-success {
+  color: hsl(var(--color-success));
+}
+
+.text-error {
+  color: hsl(var(--color-error));
+}
+
+.text-warning {
+  color: hsl(var(--color-warning));
+}
+
+.text-brand {
+  color: hsl(var(--brand-primary));
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.4);
+  /* Slate 900 fade */
+  backdrop-filter: blur(4px);
+  z-index: 50;
+}
+
+/* Utility classes mapping */
+.bg-surface-1 {
+  background-color: hsl(var(--surface-1));
+}
+
+.bg-surface-2 {
+  background-color: hsl(var(--surface-2));
+}
+
+.bg-surface-3 {
+  background-color: hsl(var(--surface-3));
+}
+
+.p-4 {
+  padding: 16px;
+}
+
+.gap-4 {
+  gap: 16px;
+}
+
+/* Component Compatibility & Legacy */
+.sheet-handle {
+  width: 48px;
+  height: 5px;
+  background: hsl(var(--text-tertiary));
+  border-radius: 99px;
+  margin: 12px auto 24px;
+  opacity: 0.2;
 }
 
 .surface-2 {
@@ -222,288 +393,25 @@ textarea {
   border-radius: var(--radius-md);
 }
 
-/* Hero Card (Month Summary) */
-.hero-card {
-  background: linear-gradient(180deg, hsl(var(--surface-2)) 0%, hsl(var(--surface-1)) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  /* Subtle border */
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  position: relative;
-  overflow: hidden;
-}
-
-/* Padding Utilities */
-.card-pad-lg {
-  padding: 32px 24px;
-}
-
-.card-pad-md {
-  padding: 24px 20px;
-}
-
-.card-pad-sm {
-  padding: 16px;
-}
-
-/* ============================================================================
-   V2 Components: KPIs & Lists
-   ============================================================================ */
-
-/* KPI Grid */
-.kpi-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-
-.kpi {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
-}
-
-/* List Styles */
-.list {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  /* Divider effect if backgrounds used */
-}
-
-/* List Row: Clean, breathable rows */
-.list-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  transition: background-color 0.2s;
-}
-
-.list-row:last-child {
-  border-bottom: none;
-}
-
-.list-left {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.list-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-full);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: hsl(var(--surface-3));
-  color: hsl(var(--text-secondary));
-  font-size: 1.25rem;
-  flex-shrink: 0;
-}
-
-.list-content {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-/* ============================================================================
-   V2 Overlays & Sheets
-   ============================================================================ */
-
-.backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
-  z-index: 50;
-}
-
-.sheet {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: hsl(var(--surface-2));
-  border-top-left-radius: var(--radius-lg);
-  border-top-right-radius: var(--radius-lg);
-  padding: 24px var(--gutter);
-  padding-bottom: max(24px, env(safe-area-inset-bottom));
-  z-index: 60;
-  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.sheet-handle {
-  width: 32px;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 2px;
-  margin: 0 auto 24px auto;
-}
-
-.btn-sticky {
-  position: sticky;
-  bottom: 24px;
-  margin-top: auto;
-  box-shadow: 0 4px 20px hsla(var(--brand-primary), 0.4);
-}
-
-/* ============================================================================
-   Legacy Compatibility Classes (DO NOT REMOVE)
-   ============================================================================ */
-
-/* Glass Panel (Updated to match surfaces but keep class) */
-.glass-panel {
-  background: hsl(var(--surface-2));
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-lg);
-}
-
-.glass-panel-strong {
-  background: hsl(var(--surface-3));
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-lg);
-}
-
 .glass-card {
   background: hsl(var(--surface-2));
-  border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0, 0, 0, 0.03);
 }
 
-/* Buttons (Legacy + V2) */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 14px 24px;
-  font-weight: 600;
-  font-size: 1rem;
-  border-radius: var(--radius-md);
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s;
-  width: 100%;
-  /* Mobile first: full width default */
-}
-
-.btn:active {
-  transform: scale(0.98);
-}
-
-.btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.btn-primary {
-  background: hsl(var(--brand-primary));
-  color: white;
-}
-
-.btn-primary:hover:not(:disabled) {
-  background: hsl(var(--brand-primary-hover));
-}
-
-.btn-ghost {
-  background: transparent;
-  color: hsl(var(--text-secondary));
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Inputs (V2 Style applied to legacy class) */
-.input {
-  width: 100%;
-  padding: 16px;
-  font-size: 1rem;
-  background: hsl(var(--surface-3));
-  /* Solid background */
-  border: 1px solid transparent;
-  border-radius: var(--radius-md);
-  color: hsl(var(--text-primary));
-  outline: none;
-  transition: border-color 0.2s, background-color 0.2s;
-}
-
-.input:focus {
-  background: hsl(var(--surface-2));
-  border-color: hsl(var(--brand-primary));
-}
-
-/* Floating Action Button */
-.fab {
-  position: fixed;
-  bottom: calc(80px + env(safe-area-inset-bottom));
-  /* Above nav */
-  right: var(--gutter);
-  width: 56px;
-  height: 56px;
-  border-radius: var(--radius-full);
-  background: hsl(var(--brand-primary));
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: var(--shadow-lg);
-  z-index: 40;
-  transition: transform 0.2s;
-}
-
-.fab:active {
-  transform: scale(0.95);
-}
-
-/* Bottom Navigation (Legacy + V2 tweaks) */
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: calc(70px + env(safe-area-inset-bottom));
-  padding-bottom: env(safe-area-inset-bottom);
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border-top: 1px solid var(--glass-border);
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  z-index: 40;
-}
-
-.bottom-nav-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
+.text-meta {
+  font-size: 13px;
   color: hsl(var(--text-tertiary));
-  font-size: 0.7rem;
   font-weight: 500;
-  transition: color 0.2s;
 }
 
-.bottom-nav-item.active {
-  color: hsl(var(--brand-primary));
+.text-hero {
+  font-size: 32px;
+  font-weight: 700;
+  color: hsl(var(--text-primary));
 }
 
-/* Utility States */
-.status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  display: inline-block;
-}
-
-.status-dot-paid {
-  background: var(--color-success);
-}
-
-.status-dot-pending {
-  background: var(--color-warning);
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
 }

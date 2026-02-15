@@ -187,25 +187,25 @@ export function AddFixedExpenseDrawer({
                         exit={{ y: '100%' }}
                         transition={{ type: 'spring', damping: 30, stiffness: 300 }}
                         className="fixed bottom-0 left-0 right-0 z-[70] 
-                       bg-zinc-900 rounded-t-3xl 
+                       bg-surface-2 rounded-t-3xl 
                        max-h-[90dvh] overflow-hidden
-                       shadow-2xl shadow-black/50
-                       border-t border-white/10"
+                       shadow-2xl shadow-black/10
+                       border-t border-black/5"
                     >
                         <div className="flex justify-center pt-3 pb-2">
-                            <div className="w-10 h-1 rounded-full bg-white/20" />
+                            <div className="w-10 h-1 rounded-full bg-black/10" />
                         </div>
 
                         <div className="flex items-center justify-between px-6 pb-4">
-                            <h2 className="text-xl font-semibold text-white">Nuevo gasto fijo</h2>
-                            <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-full">
-                                <X className="w-5 h-5 text-gray-400" />
+                            <h2 className="text-h2">Nuevo gasto fijo</h2>
+                            <button onClick={onClose} className="p-2 hover:bg-black/5 rounded-full">
+                                <X className="w-5 h-5 text-tertiary" />
                             </button>
                         </div>
 
                         <form onSubmit={handleSubmit} className="px-6 pb-8 overflow-y-auto max-h-[calc(90dvh-5rem)]">
                             <div className="mb-4">
-                                <label className="text-sm font-medium text-gray-400 block mb-2">
+                                <label className="text-meta block mb-2">
                                     Nombre del gasto
                                 </label>
                                 <input
@@ -213,14 +213,12 @@ export function AddFixedExpenseDrawer({
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     placeholder="Ej: Alquiler, Seguro Coche..."
-                                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl
-                             text-white placeholder:text-gray-600
-                             focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                                    className="input"
                                 />
                             </div>
 
                             <div className="mb-4">
-                                <label className="text-sm font-medium text-gray-400 block mb-2">
+                                <label className="text-meta block mb-2">
                                     Importe
                                 </label>
                                 <div className="relative">
@@ -230,16 +228,14 @@ export function AddFixedExpenseDrawer({
                                         value={amount}
                                         onChange={handleAmountChange}
                                         placeholder="0,00"
-                                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl
-                               text-white placeholder:text-gray-600 text-2xl font-semibold
-                               focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                                        className="input text-2xl font-semibold"
                                     />
-                                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl">€</span>
+                                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary text-xl">€</span>
                                 </div>
                             </div>
 
                             <div className="mb-4">
-                                <label className="text-sm font-medium text-gray-400 block mb-2">
+                                <label className="text-meta block mb-2">
                                     Frecuencia
                                 </label>
                                 <div className="grid grid-cols-2 gap-2">
@@ -247,8 +243,8 @@ export function AddFixedExpenseDrawer({
                                         type="button"
                                         onClick={() => setFrequency('monthly')}
                                         className={`py-3 px-4 rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2 ${frequency === 'monthly'
-                                            ? 'bg-blue-500 text-white'
-                                            : 'bg-white/5 text-gray-400 hover:bg-white/10'
+                                            ? 'bg-brand-primary text-white'
+                                            : 'bg-surface-3 text-secondary hover:bg-black/5'
                                             }`}
                                     >
                                         <Repeat className="w-4 h-4" />
@@ -258,8 +254,8 @@ export function AddFixedExpenseDrawer({
                                         type="button"
                                         onClick={() => setFrequency('annual')}
                                         className={`py-3 px-4 rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2 ${frequency === 'annual'
-                                            ? 'bg-blue-500 text-white'
-                                            : 'bg-white/5 text-gray-400 hover:bg-white/10'
+                                            ? 'bg-brand-primary text-white'
+                                            : 'bg-surface-3 text-secondary hover:bg-black/5'
                                             }`}
                                     >
                                         <CalendarDays className="w-4 h-4" />
@@ -269,7 +265,7 @@ export function AddFixedExpenseDrawer({
                             </div>
 
                             <div className="mb-4">
-                                <label className="text-sm font-medium text-gray-400 block mb-2">
+                                <label className="text-meta block mb-2">
                                     {frequency === 'monthly' ? 'Día del mes' : 'Fecha de vencimiento'}
                                 </label>
                                 <div className={`grid gap-2 ${frequency === 'annual' ? 'grid-cols-2' : 'grid-cols-1'}`}>
@@ -277,17 +273,15 @@ export function AddFixedExpenseDrawer({
                                         <select
                                             value={dueDay}
                                             onChange={(e) => setDueDay(parseInt(e.target.value))}
-                                            className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl
-                                 text-white appearance-none cursor-pointer
-                                 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                                            className="input appearance-none cursor-pointer"
                                         >
                                             {Array.from({ length: 31 }, (_, i) => i + 1).map(day => (
-                                                <option key={day} value={day} className="bg-zinc-800">
+                                                <option key={day} value={day} className="bg-surface-2">
                                                     Día {day}
                                                 </option>
                                             ))}
                                         </select>
-                                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 pointer-events-none" />
+                                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-tertiary pointer-events-none" />
                                     </div>
 
                                     {frequency === 'annual' && (
@@ -295,29 +289,27 @@ export function AddFixedExpenseDrawer({
                                             <select
                                                 value={dueMonth}
                                                 onChange={(e) => setDueMonth(parseInt(e.target.value))}
-                                                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl
-                                   text-white appearance-none cursor-pointer
-                                   focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                                                className="input appearance-none cursor-pointer"
                                             >
                                                 {months.map((month, i) => (
-                                                    <option key={i} value={i + 1} className="bg-zinc-800">
+                                                    <option key={i} value={i + 1} className="bg-surface-2">
                                                         {month}
                                                     </option>
                                                 ))}
                                             </select>
-                                            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 pointer-events-none" />
+                                            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-tertiary pointer-events-none" />
                                         </div>
                                     )}
                                 </div>
                             </div>
 
                             <div className="mb-6">
-                                <label className="text-sm font-medium text-gray-400 block mb-2">
+                                <label className="text-meta block mb-2">
                                     Categoría
                                 </label>
                                 {loadingCategories ? (
                                     <div className="flex justify-center py-4">
-                                        <Loader2 className="w-6 h-6 text-gray-400 animate-spin" />
+                                        <Loader2 className="w-6 h-6 text-secondary animate-spin" />
                                     </div>
                                 ) : (
                                     <>
@@ -334,12 +326,12 @@ export function AddFixedExpenseDrawer({
                                                                 className={`flex flex-col items-center justify-center gap-1 p-2.5 rounded-xl
                                           transition-all duration-150
                                           ${isSelected
-                                                                        ? 'bg-blue-500/20 ring-2 ring-blue-500'
-                                                                        : 'bg-white/5 hover:bg-white/10'
+                                                                        ? 'bg-brand-primary/10 opacity-100 ring-2 ring-brand-primary'
+                                                                        : 'bg-surface-3 hover:bg-black/5'
                                                                     }`}
                                                             >
                                                                 <span className="text-lg">{category.icon}</span>
-                                                                <span className={`text-[9px] text-center leading-tight ${isSelected ? 'text-blue-300' : 'text-gray-500'}`}>
+                                                                <span className={`text-[9px] text-center leading-tight ${isSelected ? 'text-brand-primary' : 'text-tertiary'}`}>
                                                                     {category.name.split('/')[0]}
                                                                 </span>
                                                             </button>
@@ -350,20 +342,20 @@ export function AddFixedExpenseDrawer({
                                                         <button
                                                             type="button"
                                                             onClick={() => setIsCreatingCategory(true)}
-                                                            className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl bg-white/5 border border-dashed border-white/20 hover:bg-white/10 transition-all"
+                                                            className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl bg-surface-3 border border-dashed border-black/10 hover:bg-black/5 transition-all"
                                                         >
-                                                            <Plus className="w-5 h-5 text-gray-400" />
-                                                            <span className="text-[10px] text-gray-500">Nueva</span>
+                                                            <Plus className="w-5 h-5 text-tertiary" />
+                                                            <span className="text-[10px] text-tertiary">Nueva</span>
                                                         </button>
                                                     ) : (
-                                                        <div className="col-span-2 flex items-center gap-2 bg-white/5 p-2 rounded-xl border border-blue-500/50">
+                                                        <div className="col-span-2 flex items-center gap-2 bg-surface-3 p-2 rounded-xl border border-brand-primary/50">
                                                             <input
                                                                 type="text"
                                                                 value={newCategoryName}
                                                                 onChange={(e) => setNewCategoryName(e.target.value)}
                                                                 placeholder="Nombre..."
                                                                 autoFocus
-                                                                className="flex-1 bg-transparent border-none outline-none text-xs text-white placeholder:text-gray-600"
+                                                                className="flex-1 bg-transparent border-none outline-none text-xs text-primary placeholder:text-tertiary"
                                                                 onKeyDown={(e) => {
                                                                     if (e.key === 'Enter') {
                                                                         e.preventDefault()
@@ -375,7 +367,7 @@ export function AddFixedExpenseDrawer({
                                                             <button
                                                                 type="button"
                                                                 onClick={handleCreateCategory}
-                                                                className="p-1.5 bg-blue-500 rounded-lg"
+                                                                className="p-1.5 bg-brand-primary rounded-lg"
                                                                 disabled={!newCategoryName.trim()}
                                                             >
                                                                 <Plus className="w-3.5 h-3.5 text-white" />
@@ -389,7 +381,7 @@ export function AddFixedExpenseDrawer({
                                             <button
                                                 type="button"
                                                 onClick={() => setShowAllCategories(true)}
-                                                className="w-full py-2 text-xs text-blue-400 hover:text-blue-300 font-medium transition-colors"
+                                                className="w-full py-2 text-xs text-brand-primary hover:text-brand-primary-hover font-medium transition-colors"
                                             >
                                                 + Ver todas las categorías
                                             </button>
@@ -404,9 +396,9 @@ export function AddFixedExpenseDrawer({
                                         initial={{ opacity: 0, height: 0 }}
                                         animate={{ opacity: 1, height: 'auto' }}
                                         exit={{ opacity: 0, height: 0 }}
-                                        className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-xl"
+                                        className="mb-4 p-3 surface border border-red-500/30"
                                     >
-                                        <p className="text-red-400 text-sm text-center">{error}</p>
+                                        <p className="text-error text-sm text-center">{error}</p>
                                     </motion.div>
                                 )}
                             </AnimatePresence>
@@ -414,11 +406,10 @@ export function AddFixedExpenseDrawer({
                             <button
                                 type="submit"
                                 disabled={isPending || showSuccess}
-                                className={`w-full py-4 rounded-xl font-semibold text-lg
-                            flex items-center justify-center gap-2 transition-all
+                                className={`btn w-full text-lg
                             ${showSuccess
-                                        ? 'bg-green-500 text-white'
-                                        : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700'
+                                        ? 'btn-success'
+                                        : 'btn-primary'
                                     }
                             disabled:opacity-70`}
                             >

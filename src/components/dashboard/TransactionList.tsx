@@ -59,7 +59,7 @@ export default function TransactionList({
     if (transactions.length === 0 && showEmpty) {
         return (
             <div className="surface p-8 text-center stack">
-                <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mx-auto text-secondary">
+                <div className="w-12 h-12 rounded-full bg-surface-3 flex items-center justify-center mx-auto text-secondary">
                     <Package className="w-6 h-6" />
                 </div>
                 <div>
@@ -93,35 +93,37 @@ export default function TransactionList({
 
                     return (
                         <div
-                            className="list-row cursor-pointer hover:bg-white/5 active:bg-white/10 transition-colors"
+                            className="transaction-card cursor-pointer group"
                             key={transaction.id}
                             onClick={() => handleTransactionClick(transaction)}
                         >
-                            {/* Left Side: Icon + Title/Meta */}
-                            <div className="list-left pointer-events-none">
-                                <div className="list-icon text-xl">
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-2xl shadow-sm border border-slate-200 group-hover:scale-110 transition-transform">
                                     {catIcon}
                                 </div>
-                                <div className="list-content">
-                                    <p className="text-body font-medium truncate max-w-[180px]">
+                                <div className="flex flex-col gap-0.5">
+                                    <p className="text-body font-semibold text-slate-900 leading-tight">
                                         {displayTitle}
                                     </p>
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-meta">
-                                            {formatDate(transaction.date)}
-                                        </span>
-                                        {isPending && (
-                                            <span className="text-[10px] font-bold text-yellow-500 bg-yellow-500/10 px-1.5 py-0.5 rounded uppercase tracking-wider">
-                                                Pendiente
-                                            </span>
-                                        )}
-                                    </div>
+                                    <p className="text-[12px] font-medium text-slate-400 uppercase tracking-widest">
+                                        {formatDate(transaction.date)}
+                                    </p>
                                 </div>
                             </div>
 
-                            {/* Right Side: Amount */}
-                            <div className={`amount tabular-nums ${isPending ? 'text-tertiary opacity-70' : 'text-primary'}`}>
-                                -{formatCurrency(transaction.amount)} €
+                            <div className="flex flex-col items-end gap-0.5">
+                                <span className={`amount text-[16px] ${isPending ? 'text-slate-400' : 'text-slate-900'}`}>
+                                    -{formatCurrency(transaction.amount)} €
+                                </span>
+                                {isPending ? (
+                                    <span className="text-[10px] font-bold text-amber-500 uppercase tracking-wider">
+                                        Pendiente
+                                    </span>
+                                ) : (
+                                    <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">
+                                        Completado
+                                    </span>
+                                )}
                             </div>
                         </div>
                     )

@@ -5,56 +5,69 @@ import { usePathname } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { NAV_ITEMS } from './constants'
 
-interface NavItem {
-    href: string
-    icon: React.ElementType
-    label: string
-}
-
 export default function BottomNav() {
     const pathname = usePathname()
 
     return (
-        <nav className="fixed bottom-0 left-0 right-0 z-40 bg-black/80 backdrop-blur-xl border-t border-white/10 safe-area-bottom md:hidden">
-            <div className="flex items-center justify-around h-16 max-w-lg mx-auto px-6">
-                {NAV_ITEMS.map((item: any) => {
+        <nav className="bottom-nav md:hidden">
+            {/* Left Items */}
+            <div className="flex gap-1">
+                {NAV_ITEMS.slice(0, 2).map((item) => {
                     const isActive = pathname === item.href
                     const Icon = item.icon
-
                     return (
                         <Link
                             key={item.href}
                             href={item.href}
-                            className="relative flex flex-col items-center justify-center w-16 h-full"
+                            className={`bottom-nav-item ${isActive ? 'active' : ''}`}
                         >
                             <motion.div
                                 initial={false}
-                                animate={{
-                                    scale: isActive ? 1.1 : 1,
-                                    y: isActive ? -2 : 0,
-                                }}
-                                transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                                animate={{ scale: isActive ? 1.1 : 1 }}
                                 className="relative"
                             >
-                                {/* Active indicator */}
                                 {isActive && (
                                     <motion.div
                                         layoutId="activeTab"
-                                        className="absolute -inset-2 bg-blue-500/20 rounded-xl"
-                                        transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                                        className="absolute -inset-2 bg-brand-primary opacity-10 rounded-xl"
                                     />
                                 )}
-
-                                <Icon
-                                    className={`relative w-6 h-6 transition-colors duration-200 ${isActive ? 'text-blue-400' : 'text-gray-500'
-                                        }`}
-                                />
+                                <Icon className="w-6 h-6" strokeWidth={isActive ? 2.5 : 2} />
                             </motion.div>
+                            <span className="text-[10px] font-medium">{item.label}</span>
+                        </Link>
+                    )
+                })}
+            </div>
 
-                            <span className={`text-[10px] mt-1 font-medium transition-colors duration-200 ${isActive ? 'text-blue-400' : 'text-gray-500'
-                                }`}>
-                                {item.label}
-                            </span>
+            {/* Spacer for FAB */}
+            <div className="w-16" />
+
+            {/* Right Items */}
+            <div className="flex gap-1">
+                {NAV_ITEMS.slice(2).map((item) => {
+                    const isActive = pathname === item.href
+                    const Icon = item.icon
+                    return (
+                        <Link
+                            key={item.href}
+                            href={item.href}
+                            className={`bottom-nav-item ${isActive ? 'active' : ''}`}
+                        >
+                            <motion.div
+                                initial={false}
+                                animate={{ scale: isActive ? 1.1 : 1 }}
+                                className="relative"
+                            >
+                                {isActive && (
+                                    <motion.div
+                                        layoutId="activeTab"
+                                        className="absolute -inset-2 bg-brand-primary opacity-10 rounded-xl"
+                                    />
+                                )}
+                                <Icon className="w-6 h-6" strokeWidth={isActive ? 2.5 : 2} />
+                            </motion.div>
+                            <span className="text-[10px] font-medium">{item.label}</span>
                         </Link>
                     )
                 })}
@@ -62,4 +75,3 @@ export default function BottomNav() {
         </nav>
     )
 }
-

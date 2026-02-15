@@ -210,7 +210,7 @@ function OnboardingContent() {
     if (step === 'loading') {
         return (
             <div className="min-h-dvh bg-gradient-mesh flex items-center justify-center">
-                <Loader2 className="w-8 h-8 text-blue-400 animate-spin" />
+                <Loader2 className="w-8 h-8 text-brand-primary animate-spin" />
             </div>
         )
     }
@@ -224,11 +224,11 @@ function OnboardingContent() {
                 transition={{ duration: 0.5 }}
                 className="text-center mb-10"
             >
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 mb-4">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-brand-primary mb-4">
                     <Sparkles className="w-8 h-8 text-white" />
                 </div>
-                <h1 className="text-2xl font-bold text-white mb-2">¡Bienvenido a FamilyFlow!</h1>
-                <p className="text-gray-400 text-sm">Configura tu espacio familiar</p>
+                <h1 className="text-h1 mb-2">¡Bienvenido a FamilyFlow!</h1>
+                <p className="text-body text-sm">Configura tu espacio familiar</p>
             </motion.div>
 
             {/* Main Card */}
@@ -249,36 +249,36 @@ function OnboardingContent() {
                                 exit={{ opacity: 0, x: 20 }}
                                 className="space-y-4"
                             >
-                                <h2 className="text-lg font-semibold text-white text-center mb-6">
+                                <h2 className="text-h2 text-center mb-6">
                                     ¿Cómo quieres empezar?
                                 </h2>
 
                                 <button
                                     onClick={() => setStep('create')}
-                                    className="w-full p-4 glass-card flex items-center gap-4 hover:bg-white/10 transition-colors text-left"
+                                    className="w-full p-4 surface flex items-center gap-4 hover:bg-black/5 transition-colors text-left"
                                 >
-                                    <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center">
-                                        <Home className="w-6 h-6 text-blue-400" />
+                                    <div className="w-12 h-12 rounded-xl bg-surface-3 flex items-center justify-center">
+                                        <Home className="w-6 h-6 text-brand-primary" />
                                     </div>
                                     <div className="flex-1">
-                                        <p className="text-white font-medium">Crear mi familia</p>
-                                        <p className="text-gray-400 text-sm">Soy el primero en registrarme</p>
+                                        <p className="text-primary font-medium">Crear mi familia</p>
+                                        <p className="text-body text-sm">Soy el primero en registrarme</p>
                                     </div>
-                                    <ArrowRight className="w-5 h-5 text-gray-500" />
+                                    <ArrowRight className="w-5 h-5 text-tertiary" />
                                 </button>
 
                                 <button
                                     onClick={() => setStep('join')}
-                                    className="w-full p-4 glass-card flex items-center gap-4 hover:bg-white/10 transition-colors text-left"
+                                    className="w-full p-4 surface flex items-center gap-4 hover:bg-black/5 transition-colors text-left"
                                 >
-                                    <div className="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center">
-                                        <UserPlus className="w-6 h-6 text-green-400" />
+                                    <div className="w-12 h-12 rounded-xl bg-surface-3 flex items-center justify-center">
+                                        <UserPlus className="w-6 h-6 text-success" />
                                     </div>
                                     <div className="flex-1">
-                                        <p className="text-white font-medium">Unirme a una familia</p>
-                                        <p className="text-gray-400 text-sm">Tengo un código de invitación</p>
+                                        <p className="text-primary font-medium">Unirme a una familia</p>
+                                        <p className="text-body text-sm">Tengo un código de invitación</p>
                                     </div>
-                                    <ArrowRight className="w-5 h-5 text-gray-500" />
+                                    <ArrowRight className="w-5 h-5 text-tertiary" />
                                 </button>
                             </motion.div>
                         )}
@@ -299,19 +299,19 @@ function OnboardingContent() {
                                         onClick={() => { setStep('choose'); setState('idle'); setErrorMessage(''); }}
                                         className="p-2 hover:bg-white/10 rounded-lg transition-colors"
                                     >
-                                        <ArrowRight className="w-5 h-5 text-gray-400 rotate-180" />
+                                        <ArrowRight className="w-5 h-5 text-tertiary rotate-180" />
                                     </button>
-                                    <h2 className="text-lg font-semibold text-white">
+                                    <h2 className="text-h2">
                                         Crear mi familia
                                     </h2>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label htmlFor="familyName" className="text-sm text-gray-300">
+                                    <label htmlFor="familyName" className="text-meta">
                                         Nombre de tu familia
                                     </label>
                                     <div className="relative">
-                                        <Users className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                                        <Users className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-tertiary" />
                                         <input
                                             id="familyName"
                                             type="text"
@@ -333,7 +333,7 @@ function OnboardingContent() {
                                             initial={{ opacity: 0, height: 0 }}
                                             animate={{ opacity: 1, height: 'auto' }}
                                             exit={{ opacity: 0, height: 0 }}
-                                            className="text-red-400 text-sm text-center"
+                                            className="text-error text-sm text-center"
                                         >
                                             {errorMessage}
                                         </motion.p>
@@ -380,15 +380,15 @@ function OnboardingContent() {
                                         onClick={() => { setStep('choose'); setState('idle'); setErrorMessage(''); }}
                                         className="p-2 hover:bg-white/10 rounded-lg transition-colors"
                                     >
-                                        <ArrowRight className="w-5 h-5 text-gray-400 rotate-180" />
+                                        <ArrowRight className="w-5 h-5 text-tertiary rotate-180" />
                                     </button>
-                                    <h2 className="text-lg font-semibold text-white">
+                                    <h2 className="text-h2">
                                         Unirme a una familia
                                     </h2>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label htmlFor="inviteCode" className="text-sm text-gray-300">
+                                    <label htmlFor="inviteCode" className="text-meta">
                                         Código de invitación
                                     </label>
                                     <input
@@ -403,7 +403,7 @@ function OnboardingContent() {
                                         disabled={state === 'loading' || state === 'success'}
                                         autoFocus
                                     />
-                                    <p className="text-gray-500 text-xs text-center">
+                                    <p className="text-meta text-center">
                                         Pide el código al administrador de tu familia
                                     </p>
                                 </div>
@@ -415,7 +415,7 @@ function OnboardingContent() {
                                             initial={{ opacity: 0, height: 0 }}
                                             animate={{ opacity: 1, height: 'auto' }}
                                             exit={{ opacity: 0, height: 0 }}
-                                            className="text-red-400 text-sm text-center"
+                                            className="text-error text-sm text-center"
                                         >
                                             {errorMessage}
                                         </motion.p>
@@ -447,8 +447,8 @@ function OnboardingContent() {
                         )}
                     </AnimatePresence>
                 </div>
-            </motion.div>
-        </div>
+            </motion.div >
+        </div >
     )
 }
 
@@ -456,7 +456,7 @@ export default function OnboardingPage() {
     return (
         <Suspense fallback={
             <div className="min-h-dvh bg-gradient-mesh flex items-center justify-center">
-                <Loader2 className="w-8 h-8 text-blue-400 animate-spin" />
+                <Loader2 className="w-8 h-8 text-brand-primary animate-spin" />
             </div>
         }>
             <OnboardingContent />

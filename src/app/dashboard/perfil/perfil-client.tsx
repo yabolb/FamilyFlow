@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -9,9 +9,6 @@ import {
     Check,
     LogOut,
     Crown,
-    Moon,
-    Sun,
-    Monitor,
     Link2,
     UserPlus
 } from 'lucide-react'
@@ -32,40 +29,18 @@ interface ProfileClientProps {
     members: Member[]
 }
 
-type ThemePreference = 'dark' | 'light' | 'system'
+
 
 export default function ProfileClient({ user, family, members }: ProfileClientProps) {
     const router = useRouter()
     const supabase = createClient()
     const [codeCopied, setCodeCopied] = useState(false)
     const [linkCopied, setLinkCopied] = useState(false)
-    const [theme, setTheme] = useState<ThemePreference>('dark')
+
     const [showToast, setShowToast] = useState(false)
     const [toastMessage, setToastMessage] = useState('')
 
-    // Load theme from localStorage on mount
-    useEffect(() => {
-        const savedTheme = localStorage.getItem('theme') as ThemePreference | null
-        if (savedTheme) {
-            setTheme(savedTheme)
-            applyTheme(savedTheme)
-        }
-    }, [])
 
-    const applyTheme = (newTheme: ThemePreference) => {
-        if (newTheme === 'system') {
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-            document.documentElement.classList.toggle('dark', prefersDark)
-        } else {
-            document.documentElement.classList.toggle('dark', newTheme === 'dark')
-        }
-    }
-
-    const setThemePreference = (newTheme: ThemePreference) => {
-        setTheme(newTheme)
-        localStorage.setItem('theme', newTheme)
-        applyTheme(newTheme)
-    }
 
     const displayToast = (message: string) => {
         setToastMessage(message)
@@ -102,11 +77,7 @@ export default function ProfileClient({ user, family, members }: ProfileClientPr
         router.push('/login')
     }
 
-    const themeOptions: { value: ThemePreference; label: string; icon: React.ReactNode }[] = [
-        { value: 'dark', label: 'Oscuro', icon: <Moon className="w-4 h-4" /> },
-        { value: 'light', label: 'Claro', icon: <Sun className="w-4 h-4" /> },
-        { value: 'system', label: 'Sistema', icon: <Monitor className="w-4 h-4" /> },
-    ]
+
 
     return (
         <div className="screen pt-8 px-gutter">
@@ -183,9 +154,9 @@ export default function ProfileClient({ user, family, members }: ProfileClientPr
                             </div>
                             <button
                                 onClick={copyInviteCode}
-                                className="p-3 rounded-xl hover:bg-white/5 transition-all active:scale-95 text-secondary hover:text-white"
+                                className="p-3 rounded-xl hover:bg-black/5 transition-all active:scale-95 text-secondary hover:text-primary"
                             >
-                                {codeCopied ? <Check className="w-5 h-5 text-green-400" /> : <Copy className="w-5 h-5" />}
+                                {codeCopied ? <Check className="w-5 h-5 text-success" /> : <Copy className="w-5 h-5" />}
                             </button>
                         </div>
 
@@ -228,29 +199,13 @@ export default function ProfileClient({ user, family, members }: ProfileClientPr
                     </div>
                 </section>
 
-                {/* Theme & Logout */}
+                {/* Logout */}
                 <section className="stack">
                     <h3 className="text-h2">Ajustes</h3>
 
-                    <div className="surface p-2 grid grid-cols-3 gap-2">
-                        {themeOptions.map((option) => (
-                            <button
-                                key={option.value}
-                                onClick={() => setThemePreference(option.value as ThemePreference)}
-                                className={`flex flex-col items-center justify-center gap-2 py-3 rounded-lg transition-all text-sm font-medium ${theme === option.value
-                                    ? 'bg-brand-primary text-white shadow-md'
-                                    : 'text-secondary hover:bg-surface-3 hover:text-white'
-                                    }`}
-                            >
-                                {option.icon}
-                                {option.label}
-                            </button>
-                        ))}
-                    </div>
-
                     <button
                         onClick={handleLogout}
-                        className="btn btn-ghost text-error hover:bg-error/10 w-full justify-center mt-4"
+                        className="btn btn-ghost text-error hover:bg-error/10 w-full justify-center"
                     >
                         <LogOut className="w-5 h-5" />
                         Cerrar sesión

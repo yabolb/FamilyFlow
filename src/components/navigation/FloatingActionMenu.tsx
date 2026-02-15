@@ -47,32 +47,32 @@ export default function FloatingActionMenu() {
     ]
 
     return (
-        <div className="fixed bottom-24 md:bottom-8 right-6 z-50" ref={menuRef}>
+        <div className="fixed bottom-[24px] left-1/2 -translate-x-1/2 z-[60] md:left-auto md:right-8 md:translate-x-0 md:bottom-8 transition-all" ref={menuRef}>
             <div className="relative flex flex-col items-center">
                 {/* Sub-buttons */}
                 <AnimatePresence>
                     {isOpen && (
-                        <div className="flex flex-col items-center gap-4 mb-4">
+                        <div className="absolute bottom-[80px] flex flex-col items-center gap-4 mb-2 w-max">
                             {actions.map((action, index) => (
                                 <motion.div
                                     key={action.label}
-                                    initial={{ opacity: 0, y: 20, scale: 0.8 }}
+                                    initial={{ opacity: 0, y: 10, scale: 0.8 }}
                                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                                    exit={{ opacity: 0, y: 20, scale: 0.8 }}
+                                    exit={{ opacity: 0, y: 10, scale: 0.8 }}
                                     transition={{
                                         type: 'spring',
                                         stiffness: 400,
                                         damping: 30,
                                         delay: (actions.length - index - 1) * 0.05
                                     }}
-                                    className="flex items-center gap-3 self-end"
+                                    className="flex items-center gap-3 self-center"
                                 >
-                                    <span className="bg-black/60 backdrop-blur-md text-white text-[10px] font-medium px-2 py-1 rounded-md border border-white/10 shadow-xl uppercase tracking-wider">
+                                    <span className="surface-2 text-primary text-[10px] font-medium px-3 py-1.5 border border-white/20 shadow-lg uppercase tracking-wider rounded-lg">
                                         {action.label}
                                     </span>
                                     <button
                                         onClick={action.onClick}
-                                        className={`w-12 h-12 rounded-full flex items-center justify-center text-white shadow-2xl backdrop-blur-md border border-white/20 transition-transform active:scale-95 ${action.color}/80 hover:${action.color}`}
+                                        className={`w-12 h-12 rounded-full flex items-center justify-center text-white shadow-xl backdrop-blur-md border border-white/20 transition-transform active:scale-95 ${action.color}`}
                                     >
                                         <action.icon className="w-5 h-5" />
                                     </button>
@@ -87,24 +87,25 @@ export default function FloatingActionMenu() {
                     onClick={toggleMenu}
                     whileTap={{ scale: 0.9 }}
                     animate={{ rotate: isOpen ? 135 : 0 }}
-                    className={`w-14 h-14 rounded-full flex items-center justify-center text-white shadow-lg transition-colors
+                    transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                    className={`fab-center transition-colors relative
             ${isOpen
-                            ? 'bg-zinc-800 border border-white/10 shadow-black/50'
-                            : 'bg-gradient-to-br from-blue-500 to-blue-600 shadow-blue-500/40'
+                            ? 'bg-surface-3 border-gray-200 text-secondary'
+                            : 'bg-brand-primary text-white'
                         }`}
                 >
-                    <Plus className="w-6 h-6" />
+                    <Plus className="w-8 h-8" strokeWidth={2.5} />
                 </motion.button>
             </div>
 
-            {/* Backdrop for mobile to catch clicks outside more easily */}
+            {/* Backdrop */}
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 -z-10 bg-black/5 backdrop-blur-[2px]"
+                        className="fixed inset-0 -z-10 bg-slate-900/40 backdrop-blur-sm"
                         onClick={() => setIsOpen(false)}
                     />
                 )}

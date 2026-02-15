@@ -61,7 +61,7 @@ export default function HistoryPage() {
     if (isLoading) {
         return (
             <div className="flex items-center justify-center min-h-[50vh]">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-primary"></div>
             </div>
         )
     }
@@ -71,11 +71,11 @@ export default function HistoryPage() {
             <header className="mb-8">
                 <button
                     onClick={() => router.back()}
-                    className="text-gray-400 hover:text-white mb-4 text-sm flex items-center gap-1"
+                    className="text-secondary hover:text-primary mb-4 text-sm flex items-center gap-1"
                 >
                     <ArrowRight className="w-4 h-4 rotate-180" /> Volver
                 </button>
-                <h1 className="text-2xl font-bold text-white">Historial de Gastos</h1>
+                <h1 className="text-h1">Historial de Gastos</h1>
             </header>
 
             <div className="space-y-4">
@@ -96,8 +96,8 @@ export default function HistoryPage() {
                                 className={`
                                     relative overflow-hidden rounded-2xl p-5 cursor-pointer transition-all active:scale-95
                                     ${isCurrentMonth
-                                        ? 'bg-gradient-to-br from-blue-600/20 to-blue-800/20 border border-blue-500/30'
-                                        : 'glass-panel hover:bg-white/10'
+                                        ? 'bg-brand-primary/10 border border-brand-primary/20'
+                                        : 'glass-panel hover:bg-black/5'
                                     }
                                 `}
                             >
@@ -105,26 +105,26 @@ export default function HistoryPage() {
                                     <div className="flex items-center gap-3">
                                         <div className={`
                                             w-10 h-10 rounded-full flex items-center justify-center
-                                            ${isCurrentMonth ? 'bg-blue-500/20 text-blue-400' : 'bg-white/10 text-gray-400'}
+                                            ${isCurrentMonth ? 'bg-brand-primary/20 text-brand-primary' : 'bg-surface-3 text-secondary'}
                                         `}>
                                             <CalendarDays className="w-5 h-5" />
                                         </div>
                                         <div>
-                                            <h3 className="text-white font-medium capitalize text-lg">
+                                            <h3 className="text-xl font-bold text-primary capitalize">
                                                 {monthName}
                                             </h3>
-                                            <p className="text-gray-500 text-xs">
+                                            <p className="text-tertiary text-xs">
                                                 {item.transaction_count} movimientos
                                             </p>
                                         </div>
                                     </div>
-                                    <ChevronRight className="w-5 h-5 text-gray-500" />
+                                    <ChevronRight className="w-5 h-5 text-tertiary" />
                                 </div>
 
                                 <div className="mt-4 flex items-end justify-between">
                                     <div>
-                                        <p className="text-gray-400 text-xs mb-1 uppercase tracking-wider">Total Gastado</p>
-                                        <p className="text-2xl font-bold text-white">
+                                        <p className="text-meta mb-1 uppercase tracking-wider">Total Gastado</p>
+                                        <p className="text-2xl font-bold text-primary">
                                             {new Intl.NumberFormat('es-ES', {
                                                 style: 'currency',
                                                 currency: 'EUR'
@@ -139,10 +139,10 @@ export default function HistoryPage() {
                         )
                     })
                 ) : (
-                    <div className="text-center py-12 bg-white/5 rounded-2xl border border-white/10">
-                        <CalendarDays className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-                        <h3 className="text-white font-medium mb-1">Sin historial</h3>
-                        <p className="text-gray-400 text-sm">Aún no hay registros mensuales completos.</p>
+                    <div className="text-center py-12 surface">
+                        <CalendarDays className="w-12 h-12 text-tertiary mx-auto mb-3" />
+                        <h3 className="text-primary font-medium mb-1">Sin historial</h3>
+                        <p className="text-secondary text-sm">Aún no hay registros mensuales completos.</p>
                     </div>
                 )}
             </div>

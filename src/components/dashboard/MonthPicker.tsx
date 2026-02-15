@@ -38,22 +38,22 @@ export default function MonthPicker() {
 
     return (
         <div className="flex flex-col items-center gap-2 mb-2">
-            <div className="flex items-center gap-4 bg-white/5 rounded-full p-1 pl-4 pr-1 backdrop-blur-sm border border-white/10">
-                <span className="text-white font-medium capitalize text-sm min-w-[100px] text-center">
+            <div className="flex items-center gap-4 bg-surface-2 rounded-full p-1 pl-4 pr-1 shadow-sm border border-black/6">
+                <span className="text-primary font-medium capitalize text-sm min-w-[100px] text-center">
                     {formattedDate}
                 </span>
 
                 <div className="flex items-center gap-1">
                     <button
                         onClick={() => navigateMonth('prev')}
-                        className="p-1.5 rounded-full hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+                        className="p-1.5 rounded-full hover:bg-black/5 text-secondary hover:text-primary transition-colors"
                         aria-label="Mes anterior"
                     >
                         <ChevronLeft className="w-4 h-4" />
                     </button>
                     <button
                         onClick={() => navigateMonth('next')}
-                        className="p-1.5 rounded-full hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+                        className="p-1.5 rounded-full hover:bg-black/5 text-secondary hover:text-primary transition-colors"
                         aria-label="Mes siguiente"
                         disabled={isSameMonth(currentDate, addMonths(today, 12))} // Optional: limit future
                     >
@@ -67,7 +67,7 @@ export default function MonthPicker() {
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     onClick={resetToToday}
-                    className="flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 transition-colors bg-blue-500/10 px-3 py-1 rounded-full"
+                    className="flex items-center gap-1.5 text-xs text-brand-primary hover:text-brand-primary-hover transition-colors bg-brand-primary/10 px-3 py-1 rounded-full"
                 >
                     <RotateCcw className="w-3 h-3" />
                     Volver al presente

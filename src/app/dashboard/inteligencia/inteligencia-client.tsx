@@ -86,14 +86,14 @@ export default function InteligenciaClient({ data }: IntelligenceClientProps) {
                     <p className="text-body mb-4 pr-8 relative z-10">
                         Al ritmo actual de gasto variable, cerraréis el mes con un total aproximado de:
                     </p>
-                    <div className="text-4xl font-bold text-white relative z-10">
+                    <div className="text-4xl font-bold text-primary relative z-10">
                         {formatCurrency(monthlyProjection)}
                     </div>
                     <div className="mt-2 text-sm text-meta flex items-center gap-2">
                         {variable.percentage > 0 ? (
-                            <span className="text-red-400">+{variable.percentage.toFixed(1)}% vs mes anterior</span>
+                            <span className="text-error">+{variable.percentage.toFixed(1)}% vs mes anterior</span>
                         ) : (
-                            <span className="text-green-400">{variable.percentage.toFixed(1)}% vs mes anterior</span>
+                            <span className="text-success">{variable.percentage.toFixed(1)}% vs mes anterior</span>
                         )}
                     </div>
                 </motion.div>
@@ -108,10 +108,10 @@ export default function InteligenciaClient({ data }: IntelligenceClientProps) {
                     <h3 className="text-sub mb-4">Composición Estimada</h3>
 
                     {/* Bar */}
-                    <div className="h-4 w-full bg-white/5 rounded-full overflow-hidden flex mb-4">
+                    <div className="h-4 w-full bg-black/5 rounded-full overflow-hidden flex mb-4">
                         {/* Variable */}
                         <div
-                            className="bg-blue-500 h-full"
+                            className="bg-brand-primary h-full"
                             style={{ width: `${pctVariable}%` }}
                         />
                         {/* Fixed */}
@@ -130,24 +130,24 @@ export default function InteligenciaClient({ data }: IntelligenceClientProps) {
                     <div className="space-y-2 text-sm">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                                <div className="w-3 h-3 rounded-full bg-blue-500" />
-                                <span className="text-gray-400">Variables estimados</span>
+                                <div className="w-3 h-3 rounded-full bg-brand-primary" />
+                                <span className="text-secondary">Variables estimados</span>
                             </div>
-                            <span className="font-medium text-white">{formatCurrency(variableProjected)}</span>
+                            <span className="font-medium text-primary">{formatCurrency(variableProjected)}</span>
                         </div>
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 <div className="w-3 h-3 rounded-full bg-violet-500" />
-                                <span className="text-gray-400">Gastos Fijos</span>
+                                <span className="text-secondary">Gastos Fijos</span>
                             </div>
-                            <span className="font-medium text-white">{formatCurrency(fixedTotal)}</span>
+                            <span className="font-medium text-primary">{formatCurrency(fixedTotal)}</span>
                         </div>
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 <div className="w-3 h-3 rounded-full bg-emerald-500" />
-                                <span className="text-gray-400">Reservas Anuales</span>
+                                <span className="text-secondary">Reservas Anuales</span>
                             </div>
-                            <span className="font-medium text-white">{formatCurrency(annualProvision)}</span>
+                            <span className="font-medium text-primary">{formatCurrency(annualProvision)}</span>
                         </div>
                     </div>
                 </motion.div>
@@ -165,9 +165,9 @@ export default function InteligenciaClient({ data }: IntelligenceClientProps) {
                                 <AlertTriangle className="w-6 h-6" />
                             </div>
                             <div>
-                                <h3 className="text-white font-medium mb-1">Categoría Principal</h3>
+                                <h3 className="text-primary font-medium mb-1">Categoría Principal</h3>
                                 <p className="text-body text-sm mb-2">
-                                    <span className="text-white font-semibold">{topCategory.name}</span> es donde más estáis gastando este mes ({formatCurrency(topCategory.amount)}).
+                                    <span className="text-primary font-semibold">{topCategory.name}</span> es donde más estáis gastando este mes ({formatCurrency(topCategory.amount)}).
                                 </p>
                             </div>
                         </div>
@@ -187,9 +187,9 @@ export default function InteligenciaClient({ data }: IntelligenceClientProps) {
                                 <PiggyBank className="w-6 h-6" />
                             </div>
                             <div>
-                                <h3 className="text-white font-medium mb-1">Propuesta de Ahorro</h3>
+                                <h3 className="text-primary font-medium mb-1">Propuesta de Ahorro</h3>
                                 <p className="text-body text-sm">
-                                    Si reducís un <span className="text-emerald-400 font-bold">10%</span> en {savingProposal.category}, podríais ahorrar <span className="text-emerald-400 font-bold">{formatCurrency(savingProposal.amount)}</span> este mes.
+                                    Si reducís un <span className="text-emerald-600 font-bold">10%</span> en {savingProposal.category}, podríais ahorrar <span className="text-emerald-600 font-bold">{formatCurrency(savingProposal.amount)}</span> este mes.
                                 </p>
                             </div>
                         </div>
