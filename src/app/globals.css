@@ -433,45 +433,56 @@ textarea {
 
 .feedback-trigger {
   position: fixed;
-  top: 16px;
-  right: 16px;
+  top: 20px;
+  right: 20px;
   z-index: 60;
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-full);
-  background: hsl(var(--surface-2));
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow: var(--shadow-md);
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px 8px 12px;
+  border-radius: var(--radius-full);
+  background: hsl(var(--brand-primary));
+  border: none;
+  box-shadow: 0 2px 12px hsl(var(--brand-primary) / 0.35);
   cursor: pointer;
-  color: hsl(var(--brand-primary));
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .feedback-trigger:hover {
-  box-shadow: var(--shadow-lg);
-  transform: scale(1.05);
+  box-shadow: 0 4px 20px hsl(var(--brand-primary) / 0.45);
+  transform: scale(1.04);
 }
 
 .feedback-trigger:active {
-  transform: scale(0.95);
+  transform: scale(0.96);
+}
+
+/* Flexbox wrapper centers the modal without CSS transform (avoids framer-motion conflict) */
+.feedback-modal-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 101;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  pointer-events: none;
 }
 
 .feedback-modal {
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 101;
-  width: calc(100% - 48px);
+  position: relative;
+  width: 100%;
   max-width: 380px;
   background: hsl(var(--surface-2));
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-xl);
   border: 1px solid rgba(0, 0, 0, 0.04);
   padding: 28px 24px;
+  pointer-events: auto;
 }
 
 .feedback-option {
