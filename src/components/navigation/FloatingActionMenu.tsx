@@ -51,7 +51,7 @@ export default function FloatingActionMenu() {
     if (isExpenseDrawerOpen || isFixedDrawerOpen) return null
 
     return (
-        <div className="fixed bottom-[24px] left-1/2 -translate-x-1/2 z-[60] transition-all" ref={menuRef}>
+        <div className="fixed bottom-[36px] left-1/2 -translate-x-1/2 z-[60] transition-all" ref={menuRef}>
             <div className="relative flex flex-col items-center">
                 {/* Sub-buttons */}
                 <AnimatePresence>

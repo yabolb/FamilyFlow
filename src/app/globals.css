@@ -71,10 +71,10 @@
   --max-width: 480px;
 
   /* Radius (From UI "12px RAD") */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 20px;
-  --radius-xl: 32px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
   --radius-full: 9999px;
 
   /* Glassmorphism */
@@ -199,11 +199,10 @@ textarea {
 /* Inputs */
 .input {
   width: 100%;
-  padding: 16px;
+  padding: 14px 16px;
   font-size: 16px;
   background: hsl(var(--surface-2));
   border: 1px solid hsl(210 20% 90%);
-  /* Light slate border */
   border-radius: var(--radius-md);
   color: hsl(var(--text-primary));
   outline: none;
@@ -216,8 +215,27 @@ textarea {
 }
 
 .input-icon {
-  padding-left: 48px;
-  /* More space for icons */
+  padding-left: 44px;
+}
+
+/* Icon inside input — vertically centered */
+.input-icon-glyph {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  color: hsl(var(--text-tertiary));
+  pointer-events: none;
+}
+
+/* Auth page card */
+.glass-panel {
+  background: hsl(var(--surface-1));
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 /* Buttons */
@@ -301,15 +319,13 @@ textarea {
 
 /* FAB - Integrated Center Button */
 .fab-center {
-  width: 56px;
-  height: 56px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 16px hsla(var(--brand-primary), 0.4);
-  transform: translateY(-24px);
-  /* Pop out effect */
+  box-shadow: 0 4px 12px hsla(var(--brand-primary), 0.35);
 }
 
 /* Lists as Cards */

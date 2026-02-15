@@ -224,10 +224,10 @@ function OnboardingContent() {
                 transition={{ duration: 0.5 }}
                 className="text-center mb-10"
             >
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-brand-primary mb-4">
+                <div className="w-16 h-16 rounded-2xl bg-brand-primary inline-flex items-center justify-center mb-5 shadow-lg">
                     <Sparkles className="w-8 h-8 text-white" />
                 </div>
-                <h1 className="text-h1 mb-2">¡Bienvenido a Family Fin!</h1>
+                <h1 className="text-h1 mb-1">¡Bienvenido a Family Fin!</h1>
                 <p className="text-body text-sm">Configura tu espacio familiar</p>
             </motion.div>
 
@@ -238,7 +238,7 @@ function OnboardingContent() {
                 transition={{ duration: 0.4, delay: 0.1 }}
                 className="w-full max-w-sm"
             >
-                <div className="glass-panel p-8">
+                <div className="glass-panel p-6 md:p-8">
                     <AnimatePresence mode="wait">
                         {/* Step: Choose */}
                         {step === 'choose' && (
@@ -247,7 +247,7 @@ function OnboardingContent() {
                                 initial={{ opacity: 0, x: -20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: 20 }}
-                                className="space-y-4"
+                                className="space-y-5"
                             >
                                 <h2 className="text-h2 text-center mb-6">
                                     ¿Cómo quieres empezar?
@@ -311,14 +311,14 @@ function OnboardingContent() {
                                         Nombre de tu familia
                                     </label>
                                     <div className="relative">
-                                        <Users className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-tertiary" />
+                                        <Users className="input-icon-glyph" />
                                         <input
                                             id="familyName"
                                             type="text"
                                             value={familyName}
                                             onChange={(e) => setFamilyName(e.target.value)}
                                             placeholder="Familia García"
-                                            className="input pl-11"
+                                            className="input input-icon"
                                             required
                                             disabled={state === 'loading' || state === 'success'}
                                             autoFocus

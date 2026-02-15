@@ -50,16 +50,16 @@ function LoginContent() {
                 animate={{ y: 0, opacity: 1 }}
                 className="w-full max-w-md z-10"
             >
-                <div className="text-center mb-8">
-                    <div className="w-16 h-16 bg-brand-primary rounded-2xl mx-auto flex items-center justify-center mb-4 shadow-lg">
+                <div className="text-center mb-10">
+                    <div className="w-16 h-16 bg-brand-primary rounded-2xl inline-flex items-center justify-center mb-5 shadow-lg">
                         <span className="text-white text-3xl font-bold">✨</span>
                     </div>
-                    <h1 className="text-h1 mb-2">Family Fin</h1>
+                    <h1 className="text-h1 mb-1">Family Fin</h1>
                     <p className="text-body">Gestiona las finanzas de tu familia</p>
                 </div>
 
                 <div className="glass-panel p-6 md:p-8">
-                    <form onSubmit={handleLogin} className="space-y-4">
+                    <form onSubmit={handleLogin} className="space-y-5">
                         <div>
                             <label className="text-meta mb-1.5 block">Email</label>
                             <div className="relative">
@@ -71,7 +71,7 @@ function LoginContent() {
                                     placeholder="tu@email.com"
                                     required
                                 />
-                                <Mail className="w-5 h-5 text-tertiary absolute left-3 top-3" />
+                                <Mail className="input-icon-glyph" />
                             </div>
                         </div>
 
@@ -86,7 +86,7 @@ function LoginContent() {
                                     placeholder="••••••••"
                                     required
                                 />
-                                <Lock className="w-5 h-5 text-tertiary absolute left-3 top-3" />
+                                <Lock className="input-icon-glyph" />
                             </div>
                         </div>
 
