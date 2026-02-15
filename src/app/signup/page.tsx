@@ -57,6 +57,12 @@ function SignupContent() {
                 throw new Error('Error al crear la cuenta')
             }
 
+            // Guard: Supabase returns a fake user with empty identities
+            // when email is already registered (to prevent email enumeration)
+            if (authData.user.identities?.length === 0) {
+                throw new Error('already registered')
+            }
+
             // 2. Redirect to onboarding
             // If trigger worked, user will already be in family -> onboarding will redirect to dashboard
             // If trigger didn't find family (invalid code), user will land on onboarding with invite param

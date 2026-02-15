@@ -3,6 +3,7 @@
 import { DrawerProvider, useDrawer } from '@/context'
 import { BottomNav, FloatingActionMenu } from '@/components/navigation'
 import { AddExpenseDrawer, AddFixedExpenseDrawer } from '@/components/expenses'
+import { FeedbackWidget } from '@/components/feedback'
 
 function AppShellContent({ children }: { children: React.ReactNode }) {
     const {
@@ -22,6 +23,9 @@ function AppShellContent({ children }: { children: React.ReactNode }) {
             {/* Global Floating Action Menu (Variable & Fixed) */}
             <FloatingActionMenu />
             <BottomNav />
+
+            {/* Feedback Widget — appears on all screens when eligible */}
+            <FeedbackWidget />
 
             {/* Global Drawers */}
             <AddExpenseDrawer
