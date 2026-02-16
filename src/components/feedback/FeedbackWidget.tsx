@@ -96,20 +96,7 @@ export default function FeedbackWidget() {
         })
     }
 
-    const handleSkipComment = () => {
-        if (!selectedOption) return
 
-        startTransition(async () => {
-            const result = await submitFeedback(selectedOption)
-            if (result.success) {
-                setStep('success')
-                setHasResponded(true)
-                setTimeout(() => {
-                    setDisplayMode('button')
-                }, 2000)
-            }
-        })
-    }
 
     // Nothing to show
     if (displayMode === 'hidden') return null
@@ -240,16 +227,8 @@ export default function FeedbackWidget() {
 
                                             <div className="flex gap-2">
                                                 <button
-                                                    onClick={handleSkipComment}
-                                                    disabled={isPending}
-                                                    className="btn btn-ghost flex-1"
-                                                    style={{ padding: '12px 16px', fontSize: '14px' }}
-                                                >
-                                                    Omitir
-                                                </button>
-                                                <button
                                                     onClick={handleSubmit}
-                                                    disabled={isPending || !comment.trim()}
+                                                    disabled={isPending}
                                                     className="btn btn-primary flex-1"
                                                     style={{ padding: '12px 16px', fontSize: '14px' }}
                                                 >
